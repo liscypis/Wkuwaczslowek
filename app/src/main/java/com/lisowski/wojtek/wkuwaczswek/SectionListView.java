@@ -3,6 +3,7 @@ package com.lisowski.wojtek.wkuwaczswek;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
@@ -41,7 +42,6 @@ public class SectionListView extends AppCompatActivity implements View.OnClickLi
         Section section14 = new Section("j");
         section1.addWord(w1);
         section1.addWord(w2);
-        section1.setSelected(true);
         section1.addWord(w3);
         section1.addWord(w4);
 
@@ -65,6 +65,7 @@ public class SectionListView extends AppCompatActivity implements View.OnClickLi
         SectionAdapter sectionAdapter = new SectionAdapter(SectionListView.this, R.layout.section_record, arrayList);
         listView = (ListView) findViewById(R.id.sectionListView);
         listView.setAdapter(sectionAdapter);
+
 
 
     }

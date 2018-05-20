@@ -13,14 +13,14 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class SectionAdapter extends ArrayAdapter {
+public class SelectSectionAdapter extends ArrayAdapter {
     private static final String TAG = "SectionAdapter";
     private final int layoutResource;
     private final LayoutInflater layoutInflater;
     private ArrayList<Section> arrayList;
     private Context context;
 
-    public SectionAdapter(@NonNull Context context, int resource, ArrayList<Section> arrayList) {
+    public SelectSectionAdapter(@NonNull Context context, int resource, ArrayList<Section> arrayList) {
         super(context, resource);
         this.context = context;
         this.layoutResource = resource;
@@ -50,10 +50,10 @@ public class SectionAdapter extends ArrayAdapter {
 
         Section currentApp = arrayList.get(position);
 
-        viewHolder.check.setOnClickListener(new View.OnClickListener() {
+        viewHolder.sectionCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Integer pos = (Integer) viewHolder.check.getTag();
+                Integer pos = (Integer) viewHolder.sectionCheck.getTag();
                 Toast.makeText(context,"Checkbox "+pos+" clicked!", Toast.LENGTH_SHORT).show();
                 if (arrayList.get(pos).isSelected())
                     arrayList.get(pos).setSelected(false);
@@ -61,20 +61,20 @@ public class SectionAdapter extends ArrayAdapter {
                 Log.d(TAG, "onClick: chuju jestem teraz na " + arrayList.get(pos).isSelected());
             }
         });
-        viewHolder.check.setTag( position);
-        viewHolder.label.setText(currentApp.toString());
-        viewHolder.check.setChecked(currentApp.isSelected());
+        viewHolder.sectionCheck.setTag( position);
+        viewHolder.sectionTv.setText(currentApp.toString());
+        viewHolder.sectionCheck.setChecked(currentApp.isSelected());
 
         return convertView;
     }
 
     private class ViewHolder {
-        final TextView label;
-        final CheckBox check;
+        final TextView sectionTv;
+        final CheckBox sectionCheck;
 
         ViewHolder(View v) {
-            this.label = (TextView) v.findViewById(R.id.label);
-            this.check = (CheckBox) v.findViewById(R.id.sectionCheck);
+            this.sectionTv = (TextView) v.findViewById(R.id.sectionTv);
+            this.sectionCheck = (CheckBox) v.findViewById(R.id.sectionCheck);
         }
 
     }

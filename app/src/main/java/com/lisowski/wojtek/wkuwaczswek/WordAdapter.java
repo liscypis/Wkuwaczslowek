@@ -1,6 +1,7 @@
 package com.lisowski.wojtek.wkuwaczswek;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,19 +14,21 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class SectionAdapter extends ArrayAdapter {
+public class WordAdapter extends ArrayAdapter {
     private static final String TAG = "SectionAdapter";
     private final int layoutResource;
     private final LayoutInflater layoutInflater;
-    private ArrayList<Section> arrayList;
+    private ArrayList<Words> arrayList;
     private Context context;
+    private int sectionID;
 
-    public SectionAdapter(@NonNull Context context, int resource, ArrayList<Section> arrayList) {
+    public WordAdapter(@NonNull Context context, int resource, ArrayList<Words> arrayList, int sectionID) {
         super(context, resource);
         this.context = context;
         this.layoutResource = resource;
         this.layoutInflater = LayoutInflater.from(context);
         this.arrayList = arrayList;
+        this.sectionID = sectionID;
     }
 
     @Override
@@ -48,33 +51,42 @@ public class SectionAdapter extends ArrayAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Section currentApp = arrayList.get(position);
+        Words currentApp = arrayList.get(position);
 
-        viewHolder.check.setOnClickListener(new View.OnClickListener() {
+        viewHolder.wordCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Integer pos = (Integer) viewHolder.check.getTag();
-                Toast.makeText(context,"Checkbox "+pos+" clicked!", Toast.LENGTH_SHORT).show();
+                Integer pos = (Integer) viewHolder.wordCheckBox.getTag();
+                Toast.makeText(context, "Checkbox " + pos + " clicked!", Toast.LENGTH_SHORT).show();
                 if (arrayList.get(pos).isSelected())
                     arrayList.get(pos).setSelected(false);
                 else arrayList.get(pos).setSelected(true);
-                Log.d(TAG, "onClick: chuju jestem teraz na " + arrayList.get(pos).isSelected());
+                Intent intent = new Intent(context, EditWord.class);
+                intent.putExtra("WORD_ID", pos);
+                intent.putExtra("SECTION_ID",sectionID);
+
+                if (intent != null)
+                    context.startActivity(intent);
+
             }
         });
-        viewHolder.check.setTag( position);
-        viewHolder.label.setText(currentApp.toString());
-        viewHolder.check.setChecked(currentApp.isSelected());
+        viewHolder.wordCheckBox.setTag(position);
+        viewHolder.wordTV.setText(currentApp.getWord());
+        viewHolder.translationTV.setText(currentApp.getTranslation());
+        viewHolder.wordCheckBox.setChecked(currentApp.isSelected());
 
         return convertView;
     }
 
     private class ViewHolder {
-        final TextView label;
-        final CheckBox check;
+        final TextView wordTV;
+        final TextView translationTV;
+        final CheckBox wordCheckBox;
 
         ViewHolder(View v) {
-            this.label = (TextView) v.findViewById(R.id.label);
-            this.check = (CheckBox) v.findViewById(R.id.sectionCheck);
+            this.wordTV = (TextView) v.findViewById(R.id.wordTV);
+            this.translationTV = (TextView) v.findViewById(R.id.translationTV);
+            this.wordCheckBox = (CheckBox) v.findViewById(R.id.wordCheckBox);
         }
 
     }

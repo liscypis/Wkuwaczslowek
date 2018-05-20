@@ -1,14 +1,21 @@
 package com.lisowski.wojtek.wkuwaczswek;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class SelectSection extends AppCompatActivity {
+//DO edycji słówek
+//!!!
 
-    private static final String TAG = "SectionListView";
+public class SelectSection extends AppCompatActivity implements View.OnClickListener{
+
+    private static final String TAG = "SelectSection";
     private ArrayList<Section> arrayList;
     ListView listView;
 
@@ -17,6 +24,9 @@ public class SelectSection extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_section);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Button applyBtn = findViewById(R.id.applyBtnWorldLW);
+        applyBtn.setOnClickListener(this);
 
         Words w1 = new Words("Tata", "Dad");
         Words w2 = new Words("Mama", "Mom");
@@ -60,8 +70,27 @@ public class SelectSection extends AppCompatActivity {
         arrayList.add(section14);
 
 
-        SectionAdapter sectionAdapter = new SectionAdapter(SelectSection.this, R.layout.section_record, arrayList);
-        listView = (ListView) findViewById(R.id.sectionListView);
+        SelectSectionAdapter sectionAdapter = new SelectSectionAdapter(SelectSection.this, R.layout.section_record_select, arrayList);
+        listView = (ListView) findViewById(R.id.selectSectionListView);
         listView.setAdapter(sectionAdapter);
+
+    }
+
+    //  TU TRZEBA BĘDZIE SPRAWDZAĆ W PĘTLI CO JEST WYBRANE A POTEM TO WYSŁAĆ
+
+    @Override
+    public void onClick(View view) {
+        Intent intent = null;
+
+        switch (view.getId()) {
+            case R.id.applyBtnWorldLW:
+                Log.d(TAG, "onCreate: ty karakanie" + arrayList.get(0).isSelected());
+                intent = new Intent(this, EditWord.class);
+                intent.putExtra("SECTION_ID", 0); // id działu się tu wyśle
+                break;
+            default:
+        }
+        if (intent != null)
+            startActivity(intent);
     }
 }

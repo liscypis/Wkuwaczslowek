@@ -3,6 +3,15 @@ package com.lisowski.wojtek.wkuwaczswek;
 public class Words {
     private String word;
     private String translation;
+    private boolean isSelected;
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
 
     public Words(String word, String translation) {
         this.word = word;

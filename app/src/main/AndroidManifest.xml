@@ -34,7 +34,8 @@
         <activity
             android:name=".SectionListView"
             android:parentActivityName=".ChooseLevel" />
-        <activity android:name=".SelectSection"></activity>
+        <activity android:name=".SelectSection" />
+        <activity android:name=".SelectWord"></activity>
     </application>
 
 </manifest>
