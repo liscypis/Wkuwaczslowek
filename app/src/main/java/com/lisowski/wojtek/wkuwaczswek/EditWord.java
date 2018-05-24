@@ -74,12 +74,14 @@ public class EditWord extends AppCompatActivity implements View.OnClickListener 
             case R.id.selectWordBtn:
                 intent = new Intent(this, SelectWord.class);
                 intent.putExtra(SECTION_ID,id);
+                break;
             case R.id.saveEditedWordBtn:
                 //TODO zapis do bazy
                 wordEditText.setText("");
                 translationEditText.setText("");
                 Toast.makeText(this, "ZAPISANO", Toast.LENGTH_SHORT).show();
                 saveEditedWordBtn.setEnabled(false);
+                break;
             default:
         }
         if (intent != null)

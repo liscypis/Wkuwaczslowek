@@ -35,7 +35,8 @@
             android:name=".SectionListView"
             android:parentActivityName=".ChooseLevel" />
         <activity android:name=".SelectSection" />
-        <activity android:name=".SelectWord"></activity>
+        <activity android:name=".SelectWord" />
+        <activity android:name=".SelectSectionInAddWords"></activity>
     </application>
 
 </manifest>

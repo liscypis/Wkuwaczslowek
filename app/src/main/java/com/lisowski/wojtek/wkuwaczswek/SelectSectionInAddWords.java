@@ -1,36 +1,33 @@
 package com.lisowski.wojtek.wkuwaczswek;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
+public class SelectSectionInAddWords extends AppCompatActivity implements View.OnClickListener{
 
-public class AddWords extends AppCompatActivity implements View.OnClickListener {
-    private ArrayList arrayList = null;
-    SelectSectionAdapter sectionAdapter = null;
-    Context context;
+    private static final String TAG = "SelectSection";
+    private ArrayList<Section> arrayList;
+    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_words);
-        context = this.getApplicationContext();
-
+        setContentView(R.layout.activity_select_section);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Button selectSectionButton = (Button) findViewById(R.id.selectSectionButton);
-        selectSectionButton.setOnClickListener(this);
+        Button applyBtn = findViewById(R.id.applyBtnWorldLW);
+        applyBtn.setOnClickListener(this);
 
-
-        ///////////////////////////////////////////////////
         Words w1 = new Words("Tata", "Dad");
         Words w2 = new Words("Mama", "Mom");
         Words w3 = new Words("Brat", "Brother");
@@ -71,49 +68,28 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
         arrayList.add(section13);
         arrayList.add(section14);
 
-        sectionAdapter = new SelectSectionAdapter(AddWords.this, R.layout.section_record_select, arrayList);
-        ////////////////////////////////
+
+        SelectSectionAdapter sectionAdapter = new SelectSectionAdapter(SelectSectionInAddWords.this, R.layout.section_record_select, arrayList);
+        listView = (ListView) findViewById(R.id.selectSectionListView);
+        listView.setAdapter(sectionAdapter);
 
     }
+    //  TU TRZEBA BĘDZIE SPRAWDZAĆ W PĘTLI CO JEST WYBRANE A POTEM TO WYSŁAĆ
 
     @Override
     public void onClick(View view) {
         Intent intent = null;
 
         switch (view.getId()) {
-            case R.id.selectSectionButton:
-                //intent = new Intent(this, SelectSectionInAddWords.class);
-                showDialog(view);
+            case R.id.applyBtnWorldLW:
+                Log.d(TAG, "onClick: ty dsdasd" + arrayList.get(0).isSelected());
+                intent = new Intent(this, AddWords.class);
+                intent.putExtra("SECTION_ID", 0); // id działu się tu wyśle
                 break;
             default:
         }
         if (intent != null)
             startActivity(intent);
     }
-    private void showDialog(View view) {
-        // setup the alert builder
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Wybierz coś");
 
-        builder.setAdapter(sectionAdapter,  new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                Toast.makeText(context,"Checkbox "+which+" clicked!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-// add OK and Cancel buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // user clicked OK
-            }
-        });
-        builder.setNegativeButton("Cancel", null);
-
-// create and show the alert dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
 }
