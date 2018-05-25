@@ -25,8 +25,6 @@ public class SelectSection extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_select_section);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Button applyBtn = findViewById(R.id.applyBtnWorldLW);
-        applyBtn.setOnClickListener(this);
 
         Words w1 = new Words("Tata", "Dad");
         Words w2 = new Words("Mama", "Mom");

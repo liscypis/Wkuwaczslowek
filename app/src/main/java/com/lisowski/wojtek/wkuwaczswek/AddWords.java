@@ -2,14 +2,14 @@ package com.lisowski.wojtek.wkuwaczswek;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.EditText;
 
 import java.util.ArrayList;
 
@@ -19,7 +19,10 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
     private static final String TAG = "AddWords";
     private ArrayList arrayList = null;
     SelectSectionAdapter sectionAdapter = null;
+    Button selectSectionButton;
+    Button addSectionButton;
     Context context;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +32,10 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Button selectSectionButton = (Button) findViewById(R.id.selectSectionButton);
+        selectSectionButton = (Button) findViewById(R.id.selectSectionButton);
         selectSectionButton.setOnClickListener(this);
+        addSectionButton = (Button) findViewById(R.id.addSectionButton);
+        addSectionButton.setOnClickListener(this);
 
 
         ///////////////////////////////////////////////////
@@ -58,7 +63,7 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
         section1.addWord(w3);
         section1.addWord(w4);
 
-        arrayList = new ArrayList<>();
+        arrayList = new ArrayList<Section>();
         arrayList.add(section1);
         arrayList.add(section2);
         arrayList.add(section3);
@@ -73,6 +78,7 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
         arrayList.add(section12);
         arrayList.add(section13);
         arrayList.add(section14);
+        arrayList.add(new Section("dodany"));
 
         sectionAdapter = new SelectSectionAdapter(AddWords.this, R.layout.section_record_select, arrayList);
         ////////////////////////////////
@@ -81,17 +87,16 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
 
     @Override
     public void onClick(View view) {
-        Intent intent = null;
-
         switch (view.getId()) {
             case R.id.selectSectionButton:
                 //intent = new Intent(this, SelectSectionInAddWords.class);
                 showDialog(view);
                 break;
+            case R.id.addSectionButton:
+                showAddSectionDialog();
+
             default:
         }
-        if (intent != null)
-            startActivity(intent);
     }
 
     private void showDialog(View view) {
@@ -102,21 +107,52 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
         builder.setAdapter(sectionAdapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
-                Toast.makeText(context, "Checkbox " + which + " clicked!", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "onClick: klikłeś" + which);
             }
         });
 
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // user clicked OK
+                for (Object o : arrayList) {
+                    Section s = (Section) o;
+                    Log.d(TAG, "OKKK " + s.toString() + " jest na " + s.isSelected());
+                    if (s.isSelected() == true)
+                        selectSectionButton.setText(s.toString());
+                }
             }
         });
-        builder.setNegativeButton("Cancel", null);
+        builder.setNegativeButton("Anuluj", null);
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    public void showAddSectionDialog() {
+        LayoutInflater layoutInflater = this.getLayoutInflater();
+        final View view = layoutInflater.inflate(R.layout.dialog_add_section, null);
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("Podaj nazwę nowego działu");
+
+        alertDialog.setCancelable(false);
+
+        final EditText ed = (EditText) view.findViewById(R.id.addSectionEditText);
+
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(!ed.getText().toString().equals("")){
+                    arrayList.add(new Section(ed.getText().toString()));
+                }
+                dialog.dismiss();
+            }
+        });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Anuluj", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertDialog.setView(view);
+        alertDialog.show();
     }
 }
