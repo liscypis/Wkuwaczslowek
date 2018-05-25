@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 
 
 public class AddWords extends AppCompatActivity implements View.OnClickListener {
+
+    private static final String TAG = "AddWords";
     private ArrayList arrayList = null;
     SelectSectionAdapter sectionAdapter = null;
     Context context;
@@ -90,20 +93,21 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
         if (intent != null)
             startActivity(intent);
     }
+
     private void showDialog(View view) {
         // setup the alert builder
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Wybierz coś");
+        builder.setTitle("Wybierz dział");
 
-        builder.setAdapter(sectionAdapter,  new DialogInterface.OnClickListener() {
+        builder.setAdapter(sectionAdapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                Toast.makeText(context,"Checkbox "+which+" clicked!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Checkbox " + which + " clicked!", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onClick: klikłeś" + which);
             }
         });
 
-// add OK and Cancel buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -112,7 +116,6 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
         });
         builder.setNegativeButton("Cancel", null);
 
-// create and show the alert dialog
         AlertDialog dialog = builder.create();
         dialog.show();
     }

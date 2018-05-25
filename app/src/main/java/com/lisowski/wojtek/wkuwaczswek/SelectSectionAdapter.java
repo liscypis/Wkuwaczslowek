@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,9 @@ public class SelectSectionAdapter extends ArrayAdapter {
     private final LayoutInflater layoutInflater;
     private ArrayList<Section> arrayList;
     private Context context;
+    int isSelected = -1;
+    RadioButton selected=null;
+
 
     public SelectSectionAdapter(@NonNull Context context, int resource, ArrayList<Section> arrayList) {
         super(context, resource);
@@ -48,33 +52,48 @@ public class SelectSectionAdapter extends ArrayAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Section currentApp = arrayList.get(position);
+        final Section currentApp = arrayList.get(position);
 
         viewHolder.sectionCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                for (Section arrElement:arrayList) {
+                    if(arrElement.isSelected() == true){
+                        isSelected = arrayList.indexOf(arrElement);
+                    }
+                }
                 Integer pos = (Integer) viewHolder.sectionCheck.getTag();
-                Toast.makeText(context,"Checkbox "+pos+" clicked!", Toast.LENGTH_SHORT).show();
-                if (arrayList.get(pos).isSelected())
-                    arrayList.get(pos).setSelected(false);
-                else arrayList.get(pos).setSelected(true);
+
+                if(selected != null){
+                    selected.setChecked(false);
+                    Log.d(TAG, "onClick: tagggg " + selected.getTag());
+                }
+                    viewHolder.sectionCheck.setChecked(true);
+                    selected = viewHolder.sectionCheck;
+
+                // Toast.makeText(context,"Checkbox "+pos+" clicked!", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onClick: index " + isSelected);
+//                if (arrayList.get(pos).isSelected())
+//                    arrayList.get(pos).setSelected(false);
+//                else arrayList.get(pos).setSelected(true);
                 Log.d(TAG, "onClick: chuju jestem teraz na " + arrayList.get(pos).isSelected());
             }
         });
-        viewHolder.sectionCheck.setTag( position);
+        viewHolder.sectionCheck.setTag(position);
         viewHolder.sectionTv.setText(currentApp.toString());
-        viewHolder.sectionCheck.setChecked(currentApp.isSelected());
+       // viewHolder.sectionCheck.setChecked(currentApp.isSelected());
+
 
         return convertView;
     }
 
     private class ViewHolder {
         final TextView sectionTv;
-        final CheckBox sectionCheck;
+        final RadioButton sectionCheck;
 
         ViewHolder(View v) {
             this.sectionTv = (TextView) v.findViewById(R.id.sectionTv);
-            this.sectionCheck = (CheckBox) v.findViewById(R.id.sectionCheck);
+            this.sectionCheck = (RadioButton) v.findViewById(R.id.sectionCheck);
         }
 
     }
