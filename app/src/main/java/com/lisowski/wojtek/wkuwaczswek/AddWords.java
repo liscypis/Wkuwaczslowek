@@ -158,8 +158,15 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!ed.getText().toString().equals("")) {
+                if (!ed.getText().toString().equals("") && !checkSection(ed.getText().toString())) {
                     arrayList.add(new Section(ed.getText().toString()));
+                    Toast toast = Toast.makeText(context, "DODANO DZIAŁ: " + ed.getText().toString(), Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.BOTTOM, 0, 200);
+                    toast.show();
+                } else {
+                    Toast toast = Toast.makeText(context, "TAKI DZIAŁ JUŻ WYSTĘPUJE", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.BOTTOM, 0, 200);
+                    toast.show();
                 }
                 dialog.dismiss();
             }
@@ -217,6 +224,18 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
             translationEditText.setText("");
         }
     }
+    // zwraca true jak nazwa sekcji juz wystepuje
+    private boolean checkSection(String s) {
+        for (Section o : arrayList) {
+            Section section = o;
+            if (section.getNameOfSection().equals(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     private void showWordsInSection () {
         Section s = arrayList.get(0);
         s.printWords();
