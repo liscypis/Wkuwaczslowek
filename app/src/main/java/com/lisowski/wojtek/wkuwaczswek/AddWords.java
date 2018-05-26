@@ -6,23 +6,29 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
-
+//TODO pobieranie z bazy i dodawanie :D
 
 public class AddWords extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "AddWords";
-    private ArrayList arrayList = null;
+    private ArrayList<Section> arrayList = null;
     SelectSectionAdapter sectionAdapter = null;
     Button selectSectionButton;
     Button addSectionButton;
+    Button addWordButton;
     Context context;
-
+    TextView selectedSectionTextView;
+    EditText wordEditText;
+    EditText translationEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +42,16 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
         selectSectionButton.setOnClickListener(this);
         addSectionButton = (Button) findViewById(R.id.addSectionButton);
         addSectionButton.setOnClickListener(this);
+        addWordButton = (Button) findViewById(R.id.addWordButton);
+        addWordButton.setOnClickListener(this);
 
+        selectedSectionTextView = (TextView) findViewById(R.id.selectedSectionTextView);
+        selectedSectionTextView.setVisibility(View.INVISIBLE);
+
+        wordEditText = (EditText) findViewById(R.id.wordEditText);
+        wordEditText.setEnabled(false);
+        translationEditText = (EditText) findViewById(R.id.translationEditText);
+        translationEditText.setEnabled(false);
 
         ///////////////////////////////////////////////////
         Words w1 = new Words("Tata", "Dad");
@@ -89,35 +104,38 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.selectSectionButton:
-                //intent = new Intent(this, SelectSectionInAddWords.class);
-                showDialog(view);
+                showDialog();
                 break;
             case R.id.addSectionButton:
                 showAddSectionDialog();
-
+                break;
+            case R.id.addWordButton:
+                checkEditText();
+                break;
             default:
         }
     }
 
-    private void showDialog(View view) {
-        // setup the alert builder
+    private void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Wybierz dział");
 
+        builder.setTitle("Wybierz dział");
         builder.setAdapter(sectionAdapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
             }
         });
-
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 for (Object o : arrayList) {
                     Section s = (Section) o;
-                    Log.d(TAG, "OKKK " + s.toString() + " jest na " + s.isSelected());
-                    if (s.isSelected() == true)
-                        selectSectionButton.setText(s.toString());
+                    if (s.isSelected() == true) {
+                        selectedSectionTextView.setVisibility(View.VISIBLE);
+                        selectedSectionTextView.setText("Wybrany dział: " + s.toString());
+                        wordEditText.setEnabled(true);
+                        translationEditText.setEnabled(true);
+                    }
                 }
             }
         });
@@ -140,7 +158,7 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(!ed.getText().toString().equals("")){
+                if (!ed.getText().toString().equals("")) {
                     arrayList.add(new Section(ed.getText().toString()));
                 }
                 dialog.dismiss();
@@ -154,5 +172,53 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
         });
         alertDialog.setView(view);
         alertDialog.show();
+    }
+
+    private void checkEditText() {
+        if (wordEditText.getText().toString().equals("") || translationEditText.getText().toString().equals("")) {
+            Toast toast = Toast.makeText(context, "Uzupełnij wszystkie pola", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.BOTTOM, 0, 200);
+            toast.show();
+            Log.d(TAG, "checkEditText: tu jest nie else :D");
+        } else {
+            addWord();
+        }
+    }
+
+    private void addWord() {
+        ArrayList<Words> wordList = null;
+        Section s = null;
+        boolean isIn = false;
+
+        for (Section o : arrayList) {
+            s = o;
+            if (s.isSelected() == true) {
+                wordList = s.getWordsArrayList();
+                break;
+            }
+        }
+        for (Words w: wordList) {
+            Words words = w;
+            if(words.getWord().equals(wordEditText.getText().toString())){
+                isIn = true;
+            }
+        }
+        if(isIn == true) {
+            Toast toast = Toast.makeText(context, "SŁOWO JUŻ WYSTĘPUJE W BAZIE ", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.BOTTOM, 0, 200);
+            toast.show();
+        } else {
+            Toast toast = Toast.makeText(context, "Dodano " + wordEditText.getText().toString() + " - " + translationEditText.getText().toString(), Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.BOTTOM, 0, 200);
+            toast.show();
+            s.addWord(new Words(wordEditText.getText().toString(), translationEditText.getText().toString()));
+            showWordsInSection ();
+            wordEditText.setText("");
+            translationEditText.setText("");
+        }
+    }
+    private void showWordsInSection () {
+        Section s = arrayList.get(0);
+        s.printWords();
     }
 }

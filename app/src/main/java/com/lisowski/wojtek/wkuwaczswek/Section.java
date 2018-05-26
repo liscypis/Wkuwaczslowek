@@ -1,8 +1,11 @@
 package com.lisowski.wojtek.wkuwaczswek;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 public class Section {
+    private static final String TAG = "Section";
     private String nameOfSection;
     private ArrayList<Words> wordsArrayList = new ArrayList<>();
     private boolean isSelected;
@@ -33,6 +36,12 @@ public class Section {
 
     public void addWord(Words words) {
         wordsArrayList.add(words);
+    }
+
+    public void printWords() {
+        for (Words w: wordsArrayList) {
+            Log.d(TAG, "printWords: "+ w.toString());
+        }
     }
 
     @Override

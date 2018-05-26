@@ -33,4 +33,12 @@ public class Words {
     public void setTranslation(String translation) {
         this.translation = translation;
     }
+
+    @Override
+    public String toString() {
+        return "Words{" +
+                "word='" + word + '\'' +
+                ", translation='" + translation + '\'' +
+                '}';
+    }
 }
