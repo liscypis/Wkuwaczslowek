@@ -37,7 +37,8 @@
         <activity android:name=".SelectSection" />
         <activity android:name=".SelectWord" />
         <activity android:name=".SelectSectionInAddWords" />
-        <activity android:name=".WordsPreview"></activity>
+        <activity android:name=".WordsPreview" />
+        <activity android:name=".EditSection"></activity>
     </application>
 
 </manifest>

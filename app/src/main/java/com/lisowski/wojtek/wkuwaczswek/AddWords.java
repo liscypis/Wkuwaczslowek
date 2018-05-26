@@ -45,7 +45,7 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
         addWordButton = (Button) findViewById(R.id.addWordButton);
         addWordButton.setOnClickListener(this);
 
-        selectedSectionTextView = (TextView) findViewById(R.id.selectedSectionTextView);
+        selectedSectionTextView = (TextView) findViewById(R.id.selectedSecTv);
         selectedSectionTextView.setVisibility(View.INVISIBLE);
 
         wordEditText = (EditText) findViewById(R.id.wordEditTx);

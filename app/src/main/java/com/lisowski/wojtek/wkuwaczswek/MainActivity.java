@@ -20,12 +20,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button addWordsBtn = findViewById(R.id.addWordsBtn);
         Button editWordsBtn = findViewById(R.id.editWordsBtn);
         Button viewWordsButton = findViewById(R.id.viewWordsButton);
+        Button editSectionButton = findViewById(R.id.editSectionButton);
 
 
         testBtn.setOnClickListener(this);
         addWordsBtn.setOnClickListener(this);
         editWordsBtn.setOnClickListener(this);
         viewWordsButton.setOnClickListener(this);
+        editSectionButton.setOnClickListener(this);
 
     }
 
@@ -45,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.viewWordsButton:
                 intent = new Intent(this, WordsPreview.class);
+                break;
+            case R.id.editSectionButton:
+                intent = new Intent(this, EditSection.class);
                 break;
             default:
         }
