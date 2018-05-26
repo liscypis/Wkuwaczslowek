@@ -17,13 +17,11 @@ public class SelectSectionAdapter extends ArrayAdapter {
     private final int layoutResource;
     private final LayoutInflater layoutInflater;
     private ArrayList<Section> arrayList;
-    private Context context;
     RadioButton selected = null;
 
 
     public SelectSectionAdapter(@NonNull Context context, int resource, ArrayList<Section> arrayList) {
         super(context, resource);
-        this.context = context;
         this.layoutResource = resource;
         this.layoutInflater = LayoutInflater.from(context);
         this.arrayList = arrayList;
@@ -58,19 +56,16 @@ public class SelectSectionAdapter extends ArrayAdapter {
                 if (selected != null) {
                     selected.setChecked(false);
                     int id = (int) selected.getTag();
-                    Log.d(TAG, "onClick: tagggg " + selected.getTag());
                     arrayList.get(id).setSelected(false);
                 }
                 viewHolder.sectionCheck.setChecked(true);
                 selected = viewHolder.sectionCheck;
                 arrayList.get(pos).setSelected(true);
-
-                Log.d(TAG, "onClick: chuju ID " + pos + " ustawione na " + arrayList.get(pos).isSelected());
             }
         });
+
         viewHolder.sectionCheck.setTag(position);
         viewHolder.sectionTv.setText(currentApp.toString());
-
 
         return convertView;
     }

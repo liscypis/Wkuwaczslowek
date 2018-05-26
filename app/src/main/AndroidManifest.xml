@@ -36,7 +36,8 @@
             android:parentActivityName=".ChooseLevel" />
         <activity android:name=".SelectSection" />
         <activity android:name=".SelectWord" />
-        <activity android:name=".SelectSectionInAddWords"></activity>
+        <activity android:name=".SelectSectionInAddWords" />
+        <activity android:name=".WordsPreview"></activity>
     </application>
 
 </manifest>

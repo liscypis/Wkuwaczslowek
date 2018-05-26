@@ -48,9 +48,9 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
         selectedSectionTextView = (TextView) findViewById(R.id.selectedSectionTextView);
         selectedSectionTextView.setVisibility(View.INVISIBLE);
 
-        wordEditText = (EditText) findViewById(R.id.wordEditText);
+        wordEditText = (EditText) findViewById(R.id.wordEditTx);
         wordEditText.setEnabled(false);
-        translationEditText = (EditText) findViewById(R.id.translationEditText);
+        translationEditText = (EditText) findViewById(R.id.translationEditTx);
         translationEditText.setEnabled(false);
 
         ///////////////////////////////////////////////////
@@ -130,7 +130,7 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
             public void onClick(DialogInterface dialog, int which) {
                 for (Object o : arrayList) {
                     Section s = (Section) o;
-                    if (s.isSelected() == true) {
+                    if (s.isSelected()) {
                         selectedSectionTextView.setVisibility(View.VISIBLE);
                         selectedSectionTextView.setText("Wybrany dział: " + s.toString());
                         wordEditText.setEnabled(true);
@@ -199,18 +199,17 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
 
         for (Section o : arrayList) {
             s = o;
-            if (s.isSelected() == true) {
+            if (s.isSelected()) {
                 wordList = s.getWordsArrayList();
                 break;
             }
         }
         for (Words w: wordList) {
-            Words words = w;
-            if(words.getWord().equals(wordEditText.getText().toString())){
+            if(w.getWord().equals(wordEditText.getText().toString())){
                 isIn = true;
             }
         }
-        if(isIn == true) {
+        if(isIn) {
             Toast toast = Toast.makeText(context, "SŁOWO JUŻ WYSTĘPUJE W BAZIE ", Toast.LENGTH_LONG);
             toast.setGravity(Gravity.BOTTOM, 0, 200);
             toast.show();
@@ -238,6 +237,8 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
 
     private void showWordsInSection () {
         Section s = arrayList.get(0);
+        s.printWords();
+        s = arrayList.get(1);
         s.printWords();
     }
 }

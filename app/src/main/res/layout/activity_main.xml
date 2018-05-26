@@ -11,9 +11,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="Sprawdz się"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="24dp"
+        android:text="Sprawdź się"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/addWordsBtn"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,24 +25,47 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
         android:text="Dodaj słówka"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/editWordsBtn"
         app:layout_constraintEnd_toEndOf="@+id/testBtn"
-        app:layout_constraintStart_toStartOf="@+id/testBtn"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/testBtn" />
 
     <Button
         android:id="@+id/editWordsBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:text="Edytuj słówka"
         android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/addWordsBtn"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/addWordsBtn"
-        app:layout_constraintTop_toBottomOf="@+id/addWordsBtn" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/editSectionButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="EDYTUJ DZIAŁY"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/editWordsBtn"
+        app:layout_constraintStart_toStartOf="@+id/editWordsBtn"
+        app:layout_constraintTop_toBottomOf="@+id/editWordsBtn" />
+
+    <Button
+        android:id="@+id/viewWordsButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="PODGLĄD SŁÓWEK"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/editSectionButton"
+        app:layout_constraintStart_toStartOf="@+id/editSectionButton"
+        app:layout_constraintTop_toBottomOf="@+id/editSectionButton" />
 
 </android.support.constraint.ConstraintLayout>

@@ -7,11 +7,11 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/wordEditText"
+        android:id="@+id/wordEditTx"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="104dp"
         android:ems="10"
         android:hint="Podaj słówko"
@@ -23,11 +23,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/translationEditText"
+        android:id="@+id/translationEditTx"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Podaj tłumaczenie"
@@ -36,7 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/wordEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/wordEditTx" />
 
     <Button
         android:id="@+id/addWordButton"
@@ -85,6 +85,6 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/translationEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/translationEditTx" />
 
 </android.support.constraint.ConstraintLayout>

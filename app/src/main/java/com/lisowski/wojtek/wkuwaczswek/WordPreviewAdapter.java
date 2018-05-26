@@ -2,7 +2,6 @@ package com.lisowski.wojtek.wkuwaczswek;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,15 +11,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class WordAdapter extends ArrayAdapter {
-    private static final String TAG = "SectionAdapter";
+public class WordPreviewAdapter extends ArrayAdapter {
     private final int layoutResource;
     private final LayoutInflater layoutInflater;
     private ArrayList<Words> arrayList;
     RadioButton selected = null;
 
 
-    public WordAdapter(@NonNull Context context, int resource, ArrayList<Words> arrayList) {
+    public WordPreviewAdapter(@NonNull Context context, int resource, ArrayList<Words> arrayList) {
         super(context, resource);
         this.layoutResource = resource;
         this.layoutInflater = LayoutInflater.from(context);
@@ -38,7 +36,6 @@ public class WordAdapter extends ArrayAdapter {
         final ViewHolder viewHolder;
 
         if (convertView == null) {
-            Log.d(TAG, "getView: called with null convertview");
             convertView = layoutInflater.inflate(layoutResource, parent, false);
 
             viewHolder = new ViewHolder(convertView);
@@ -46,25 +43,7 @@ public class WordAdapter extends ArrayAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-
         Words currentApp = arrayList.get(position);
-
-        viewHolder.wordRadioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Integer pos = (Integer) viewHolder.wordRadioButton.getTag();
-                if (selected != null) {
-                    selected.setChecked(false);
-                    int id = (int) selected.getTag();
-                    arrayList.get(id).setSelected(false);
-                }
-                viewHolder.wordRadioButton.setChecked(true);
-                selected = viewHolder.wordRadioButton;
-                arrayList.get(pos).setSelected(true);
-
-            }
-        });
-        viewHolder.wordRadioButton.setTag(position);
         viewHolder.wordTV.setText(currentApp.getWord());
         viewHolder.translationTV.setText(currentApp.getTranslation());
 
@@ -74,12 +53,10 @@ public class WordAdapter extends ArrayAdapter {
     private class ViewHolder {
         final TextView wordTV;
         final TextView translationTV;
-        final RadioButton wordRadioButton;
 
         ViewHolder(View v) {
             this.wordTV = (TextView) v.findViewById(R.id.previewWordTV);
             this.translationTV = (TextView) v.findViewById(R.id.previewTranslationTV);
-            this.wordRadioButton = (RadioButton) v.findViewById(R.id.wordRadioButton);
         }
 
     }

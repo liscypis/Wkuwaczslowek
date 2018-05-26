@@ -29,7 +29,7 @@ public class SelectWord extends AppCompatActivity {
         arrayList.add(w3);
         arrayList.add(w4);
 
-        WordAdapter wordAdapter = new WordAdapter(SelectWord.this, R.layout.word_record, arrayList, sectioid);
+        WordAdapter wordAdapter = new WordAdapter(SelectWord.this, R.layout.word_record, arrayList);
         listView = (ListView) findViewById(R.id.wordSelectListView);
         listView.setAdapter(wordAdapter);
 
