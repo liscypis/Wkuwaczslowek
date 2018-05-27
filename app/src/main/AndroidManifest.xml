@@ -21,15 +21,19 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".EditWord"
+            android:label="@string/editWord"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".AddWords"
+            android:label="@string/addWords"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".DifficultTest"
+            android:label="@string/difficultTest"
             android:parentActivityName=".ChooseLevel" />
         <activity
             android:name=".EasyTest"
+            android:label="@string/easyTest"
             android:parentActivityName=".ChooseLevel" />
         <activity
             android:name=".SectionListView"
@@ -39,9 +43,11 @@
         <activity android:name=".SelectSectionInAddWords" />
         <activity
             android:name=".WordsPreview"
+            android:label="@string/wordsPreview"
             android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".EditSection"
+            android:label="@string/editSection"
             android:parentActivityName=".MainActivity"/>
     </application>
 

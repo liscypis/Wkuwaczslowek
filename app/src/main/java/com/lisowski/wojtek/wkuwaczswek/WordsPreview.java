@@ -1,19 +1,11 @@
 package com.lisowski.wojtek.wkuwaczswek;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -31,7 +23,7 @@ public class WordsPreview extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_words_preview);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Button selSecButton = (Button) findViewById(R.id.selSecButton);
+        Button selSecButton = (Button) findViewById(R.id.selSecBTN);
         selSecButton.setOnClickListener(this);
         showWordsBtn = (Button) findViewById(R.id.showWordsBtn);
         showWordsBtn.setOnClickListener(this);
@@ -87,7 +79,7 @@ public class WordsPreview extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.selSecButton:
+            case R.id.selSecBTN:
                 showSectionDialog();
                 break;
             case R.id.showWordsBtn:

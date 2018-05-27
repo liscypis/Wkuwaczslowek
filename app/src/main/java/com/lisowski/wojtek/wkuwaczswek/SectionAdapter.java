@@ -54,14 +54,12 @@ public class SectionAdapter extends ArrayAdapter {
             @Override
             public void onClick(View view) {
                 Integer pos = (Integer) viewHolder.check.getTag();
-                Toast.makeText(context,"Checkbox "+pos+" clicked!", Toast.LENGTH_SHORT).show();
                 if (arrayList.get(pos).isSelected())
                     arrayList.get(pos).setSelected(false);
                 else arrayList.get(pos).setSelected(true);
-                Log.d(TAG, "onClick: chuju jestem teraz na " + arrayList.get(pos).isSelected());
             }
         });
-        viewHolder.check.setTag( position);
+        viewHolder.check.setTag(position);
         viewHolder.label.setText(currentApp.toString());
         viewHolder.check.setChecked(currentApp.isSelected());
 

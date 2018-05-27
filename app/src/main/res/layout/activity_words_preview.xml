@@ -7,7 +7,7 @@
     tools:context=".WordsPreview">
 
     <Button
-        android:id="@+id/selSecButton"
+        android:id="@+id/selSecBTN"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -29,7 +29,7 @@
         android:layout_marginTop="16dp"
         android:text="POKAZ SŁÓWKA"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@+id/selSecButton"
-        app:layout_constraintStart_toStartOf="@+id/selSecButton"
-        app:layout_constraintTop_toBottomOf="@+id/selSecButton" />
+        app:layout_constraintEnd_toEndOf="@+id/selSecBTN"
+        app:layout_constraintStart_toStartOf="@+id/selSecBTN"
+        app:layout_constraintTop_toBottomOf="@+id/selSecBTN" />
 </android.support.constraint.ConstraintLayout>
