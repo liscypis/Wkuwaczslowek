@@ -35,6 +35,7 @@ public class EditSection extends AppCompatActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_section);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         context = getApplicationContext();
 
@@ -119,6 +120,13 @@ public class EditSection extends AppCompatActivity implements View.OnClickListen
             case R.id.deleteSectionBtn:
                 deleteSectionDialog();
                 break;
+            case R.id.changeNameSecBtn:
+                changeSectionName();
+                break;
+            case R.id.saveChangesBtn:
+                updateNameSection();
+                break;
+
             default:
         }
     }
@@ -169,7 +177,6 @@ public class EditSection extends AppCompatActivity implements View.OnClickListen
 
     private void deleteSectionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
         builder.setTitle("UWAGA!");
         builder.setMessage("Czy na pewno usunąć?");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -193,5 +200,38 @@ public class EditSection extends AppCompatActivity implements View.OnClickListen
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+    private void changeSectionName() {
+        deleteSectionBtn.setVisibility(View.INVISIBLE);
+        changeNameSecBtn.setVisibility(View.INVISIBLE);
+        newNameTv.setVisibility(View.VISIBLE);
+        newNameSectionEt.setVisibility(View.VISIBLE);
+        saveChangesBtn.setEnabled(true);
+    }
+    private void updateNameSection() {
+        if(newNameSectionEt.getText().toString().equals("")){
+            Toast toast = Toast.makeText(context, "Podaj nową nazwę!", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.BOTTOM, 0, 200);
+            toast.show();
+        } else {
+            for (Section section : arrayList) {
+                if (section.isSelected()) {
+                    section.setNameOfSection(newNameSectionEt.getText().toString());
+                    break;
+                }
+            }
+            Toast toast = Toast.makeText(context, "Zapisano zmiany", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.BOTTOM, 0, 200);
+            toast.show();
+
+            selectedSecTv.setText("");
+            deleteSectionBtn.setEnabled(false);
+            changeNameSecBtn.setEnabled(false);
+            deleteSectionBtn.setVisibility(View.VISIBLE);
+            changeNameSecBtn.setVisibility(View.VISIBLE);
+            newNameTv.setVisibility(View.INVISIBLE);
+            newNameSectionEt.setVisibility(View.INVISIBLE);
+            saveChangesBtn.setEnabled(false);
+        }
     }
 }

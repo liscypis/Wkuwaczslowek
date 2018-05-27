@@ -37,8 +37,12 @@
         <activity android:name=".SelectSection" />
         <activity android:name=".SelectWord" />
         <activity android:name=".SelectSectionInAddWords" />
-        <activity android:name=".WordsPreview" />
-        <activity android:name=".EditSection"></activity>
+        <activity
+            android:name=".WordsPreview"
+            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".EditSection"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>
