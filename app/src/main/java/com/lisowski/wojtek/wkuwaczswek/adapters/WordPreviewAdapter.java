@@ -1,4 +1,4 @@
-package com.lisowski.wojtek.wkuwaczswek;
+package com.lisowski.wojtek.wkuwaczswek.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
 import android.widget.TextView;
+
+import com.lisowski.wojtek.wkuwaczswek.R;
+import com.lisowski.wojtek.wkuwaczswek.Words;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.lisowski.wojtek.wkuwaczswek;
+package com.lisowski.wojtek.wkuwaczswek.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,6 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.lisowski.wojtek.wkuwaczswek.R;
+import com.lisowski.wojtek.wkuwaczswek.Section;
 
 import java.util.ArrayList;
 

@@ -1,46 +1,47 @@
-package com.lisowski.wojtek.wkuwaczswek;
+package com.lisowski.wojtek.wkuwaczswek.activities;
 
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.method.ScrollingMovementMethod;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.lisowski.wojtek.wkuwaczswek.R;
+import com.lisowski.wojtek.wkuwaczswek.Section;
+import com.lisowski.wojtek.wkuwaczswek.Words;
+import com.lisowski.wojtek.wkuwaczswek.adapters.SelectSectionAdapter;
+import com.lisowski.wojtek.wkuwaczswek.adapters.WordPreviewAdapter;
 
 import java.util.ArrayList;
 
-public class ChooseLevel extends AppCompatActivity implements View.OnClickListener {
+public class WordsPreview extends AppCompatActivity implements View.OnClickListener{
 
-    private RadioGroup rdGrp;
-    private static final String TAG = "ChooseLevel";
-    private Button selSecButton;
-    private Button goBtn;
-    private TextView selectedSectionsTV;
     private ArrayList<Section> arrayList;
-    SectionAdapter sectionAdapter = null;
+    private ArrayList<Words> wordsArrayList;
+    SelectSectionAdapter sectionAdapter = null;
+
+    Button showWordsBtn;
+    TextView textViewSelSec;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choose_level);
+        setContentView(R.layout.activity_words_preview);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        rdGrp = findViewById(R.id.rdGrp);
-        goBtn = findViewById(R.id.goBtn);
-        selSecButton = findViewById(R.id.selSecBTN);
+        Button selSecButton = (Button) findViewById(R.id.selSecBTN);
         selSecButton.setOnClickListener(this);
-        goBtn.setOnClickListener(this);
+        showWordsBtn = (Button) findViewById(R.id.showWordsBtn);
+        showWordsBtn.setOnClickListener(this);
+        showWordsBtn.setEnabled(false);
 
-        selectedSectionsTV = (TextView) findViewById(R.id.selectedSectionsTV);
-        selectedSectionsTV.setText("");
-        selectedSectionsTV.setMovementMethod(new ScrollingMovementMethod());
+        textViewSelSec = (TextView) findViewById(R.id.textViewSelSec);
+        textViewSelSec.setText("");
 
-        ///////////////////////////////////////
+
+        ///////////////////////////////////////////////////
         Words w1 = new Words("Tata", "Dad");
         Words w2 = new Words("Mama", "Mom");
         Words w3 = new Words("Brat", "Brother");
@@ -65,7 +66,7 @@ public class ChooseLevel extends AppCompatActivity implements View.OnClickListen
         section1.addWord(w3);
         section1.addWord(w4);
 
-        arrayList = new ArrayList<>();
+        arrayList = new ArrayList<Section>();
         arrayList.add(section1);
         arrayList.add(section2);
         arrayList.add(section3);
@@ -80,11 +81,10 @@ public class ChooseLevel extends AppCompatActivity implements View.OnClickListen
         arrayList.add(section12);
         arrayList.add(section13);
         arrayList.add(section14);
+        arrayList.add(new Section("dodany"));
 
-
-        sectionAdapter = new SectionAdapter(ChooseLevel.this, R.layout.section_record, arrayList);
-        ///////////////////////////////
-
+        sectionAdapter = new SelectSectionAdapter(WordsPreview.this, R.layout.section_record_select, arrayList);
+        ////////////////////////////////
     }
 
     @Override
@@ -93,9 +93,9 @@ public class ChooseLevel extends AppCompatActivity implements View.OnClickListen
             case R.id.selSecBTN:
                 showSectionDialog();
                 break;
-            case R.id.goBtn:
-                checkIsSelectedSection();
-                   break;
+            case R.id.showWordsBtn:
+                showWordsDialog();
+                break;
             default:
         }
     }
@@ -103,7 +103,7 @@ public class ChooseLevel extends AppCompatActivity implements View.OnClickListen
     private void showSectionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setTitle("Wybierz dział/y");
+        builder.setTitle("Wybierz dział");
         builder.setAdapter(sectionAdapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -112,14 +112,13 @@ public class ChooseLevel extends AppCompatActivity implements View.OnClickListen
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String selectedSection = "Wybrane działy: ";
                 for (Section section : arrayList) {
-                    if (section.isSelected()) {
-                        selectedSection += section.getNameOfSection();
-                        selectedSection += " \n";
+                    Section s = section;
+                    if (s.isSelected()) {
+                        showWordsBtn.setEnabled(true);
+                        textViewSelSec.setText("Wybrany dział: " + s.getNameOfSection());
                     }
                 }
-                selectedSectionsTV.setText(selectedSection);
             }
         });
         builder.setNegativeButton("Anuluj", null);
@@ -127,28 +126,30 @@ public class ChooseLevel extends AppCompatActivity implements View.OnClickListen
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
-    private void checkIsSelectedSection() {
-        boolean isSelected = false;
-        for (Section section : arrayList) {
-            if (section.isSelected()) {
-                isSelected = true;
+    private void showWordsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        for (Section section: arrayList) {
+            if(section.isSelected()){
+                section.setSelected(false);
+                wordsArrayList = section.getWordsArrayList();
                 break;
             }
         }
-        if (isSelected) {
-            if (rdGrp.getCheckedRadioButtonId() == R.id.easyBtn) {
-                //TODO tu się wyśle wybrane działy albo i nie :D
-                Intent intent = new Intent(this, EasyTest.class);
-                startActivity(intent);
-            } else {
-                Intent intent = new Intent(this, DifficultTest.class);
-                startActivity(intent);
-            }
+        WordPreviewAdapter wordPreviewAdapter = new WordPreviewAdapter(this,  R.layout.words_preview_record, wordsArrayList);
 
-        } else {
-            Toast.makeText(this, "Wybierz dział!", Toast.LENGTH_LONG).show();
-        }
+        builder.setTitle("Lista słówek");
+        builder.setAdapter(wordPreviewAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.setPositiveButton("ZAMKNIJ", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
-

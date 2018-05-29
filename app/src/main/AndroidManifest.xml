@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,38 +17,32 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ChooseLevel"
-            android:parentActivityName=".MainActivity" />
+            android:name=".activities.ChooseLevel"
+            android:parentActivityName=".activities.MainActivity" />
         <activity
-            android:name=".EditWord"
+            android:name=".activities.EditWord"
             android:label="@string/editWord"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".activities.MainActivity" />
         <activity
-            android:name=".AddWords"
+            android:name=".activities.AddWords"
             android:label="@string/addWords"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".activities.MainActivity" />
         <activity
-            android:name=".DifficultTest"
+            android:name=".activities.DifficultTest"
             android:label="@string/difficultTest"
-            android:parentActivityName=".ChooseLevel" />
+            android:parentActivityName=".activities.ChooseLevel" />
         <activity
-            android:name=".EasyTest"
+            android:name=".activities.EasyTest"
             android:label="@string/easyTest"
-            android:parentActivityName=".ChooseLevel" />
+            android:parentActivityName=".activities.ChooseLevel" />
         <activity
-            android:name=".SectionListView"
-            android:parentActivityName=".ChooseLevel" />
-        <activity android:name=".SelectSection" />
-        <activity android:name=".SelectWord" />
-        <activity android:name=".SelectSectionInAddWords" />
-        <activity
-            android:name=".WordsPreview"
+            android:name=".activities.WordsPreview"
             android:label="@string/wordsPreview"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".activities.MainActivity"/>
         <activity
-            android:name=".EditSection"
+            android:name=".activities.EditSection"
             android:label="@string/editSection"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".activities.MainActivity"/>
     </application>
 
 </manifest>

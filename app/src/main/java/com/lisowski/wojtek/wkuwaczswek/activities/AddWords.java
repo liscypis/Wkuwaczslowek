@@ -1,4 +1,4 @@
-package com.lisowski.wojtek.wkuwaczswek;
+package com.lisowski.wojtek.wkuwaczswek.activities;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,6 +13,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.lisowski.wojtek.wkuwaczswek.R;
+import com.lisowski.wojtek.wkuwaczswek.Section;
+import com.lisowski.wojtek.wkuwaczswek.adapters.SelectSectionAdapter;
+import com.lisowski.wojtek.wkuwaczswek.Words;
 
 import java.util.ArrayList;
 //TODO pobieranie z bazy i dodawanie :D

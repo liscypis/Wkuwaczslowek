@@ -1,4 +1,4 @@
-package com.lisowski.wojtek.wkuwaczswek;
+package com.lisowski.wojtek.wkuwaczswek.activities;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -6,15 +6,16 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.provider.UserDictionary;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.lisowski.wojtek.wkuwaczswek.R;
+import com.lisowski.wojtek.wkuwaczswek.Words;
+import com.lisowski.wojtek.wkuwaczswek.activities.ChooseLevel;
 
 import java.util.ArrayList;
 

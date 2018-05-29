@@ -1,4 +1,4 @@
-package com.lisowski.wojtek.wkuwaczswek;
+package com.lisowski.wojtek.wkuwaczswek.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,17 +10,20 @@ import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.lisowski.wojtek.wkuwaczswek.R;
+import com.lisowski.wojtek.wkuwaczswek.Words;
+
 import java.util.ArrayList;
 
-public class SelectSectionAdapter extends ArrayAdapter {
+public class WordAdapter extends ArrayAdapter {
     private static final String TAG = "SectionAdapter";
     private final int layoutResource;
     private final LayoutInflater layoutInflater;
-    private ArrayList<Section> arrayList;
+    private ArrayList<Words> arrayList;
     RadioButton selected = null;
 
 
-    public SelectSectionAdapter(@NonNull Context context, int resource, ArrayList<Section> arrayList) {
+    public WordAdapter(@NonNull Context context, int resource, ArrayList<Words> arrayList) {
         super(context, resource);
         this.layoutResource = resource;
         this.layoutInflater = LayoutInflater.from(context);
@@ -47,36 +50,39 @@ public class SelectSectionAdapter extends ArrayAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        final Section currentApp = arrayList.get(position);
+        Words currentApp = arrayList.get(position);
 
-        viewHolder.sectionCheck.setOnClickListener(new View.OnClickListener() {
+        viewHolder.wordRadioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Integer pos = (Integer) viewHolder.sectionCheck.getTag();
+                Integer pos = (Integer) viewHolder.wordRadioButton.getTag();
                 if (selected != null) {
                     selected.setChecked(false);
                     int id = (int) selected.getTag();
                     arrayList.get(id).setSelected(false);
                 }
-                viewHolder.sectionCheck.setChecked(true);
-                selected = viewHolder.sectionCheck;
+                viewHolder.wordRadioButton.setChecked(true);
+                selected = viewHolder.wordRadioButton;
                 arrayList.get(pos).setSelected(true);
+
             }
         });
-
-        viewHolder.sectionCheck.setTag(position);
-        viewHolder.sectionTv.setText(currentApp.toString());
+        viewHolder.wordRadioButton.setTag(position);
+        viewHolder.wordTV.setText(currentApp.getWord());
+        viewHolder.translationTV.setText(currentApp.getTranslation());
 
         return convertView;
     }
 
     private class ViewHolder {
-        final TextView sectionTv;
-        final RadioButton sectionCheck;
+        final TextView wordTV;
+        final TextView translationTV;
+        final RadioButton wordRadioButton;
 
         ViewHolder(View v) {
-            this.sectionTv = (TextView) v.findViewById(R.id.sectionTv);
-            this.sectionCheck = (RadioButton) v.findViewById(R.id.sectionCheck);
+            this.wordTV = (TextView) v.findViewById(R.id.previewWordTV);
+            this.translationTV = (TextView) v.findViewById(R.id.previewTranslationTV);
+            this.wordRadioButton = (RadioButton) v.findViewById(R.id.wordRadioButton);
         }
 
     }

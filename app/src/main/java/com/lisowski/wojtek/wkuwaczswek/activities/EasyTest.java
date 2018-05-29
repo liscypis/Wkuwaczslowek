@@ -1,4 +1,4 @@
-package com.lisowski.wojtek.wkuwaczswek;
+package com.lisowski.wojtek.wkuwaczswek.activities;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,6 +11,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.lisowski.wojtek.wkuwaczswek.R;
+import com.lisowski.wojtek.wkuwaczswek.Words;
+import com.lisowski.wojtek.wkuwaczswek.activities.ChooseLevel;
 
 import java.util.ArrayList;
 
