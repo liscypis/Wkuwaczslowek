@@ -1,8 +1,11 @@
 package com.lisowski.wojtek.wkuwaczswek.activities;
 
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
@@ -142,15 +145,14 @@ public class ChooseLevel extends AppCompatActivity implements View.OnClickListen
             }
         }
         if (isSelected) {
+            Intent intent = null;
             if (rdGrp.getCheckedRadioButtonId() == R.id.easyBtn) {
                 //TODO tu się wyśle wybrane działy albo i nie :D
-                Intent intent = new Intent(this, EasyTest.class);
-                startActivity(intent);
+                intent = new Intent(this, EasyTest.class);
             } else {
-                Intent intent = new Intent(this, DifficultTest.class);
-                startActivity(intent);
+                intent = new Intent(this, DifficultTest.class);
             }
-
+            startActivity(intent);
         } else {
             Toast.makeText(this, "Wybierz dział!", Toast.LENGTH_LONG).show();
         }
