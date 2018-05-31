@@ -13,10 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lisowski.wojtek.wkuwaczswek.R;
-import com.lisowski.wojtek.wkuwaczswek.Section;
+import com.lisowski.wojtek.wkuwaczswek.entities.Section;
 import com.lisowski.wojtek.wkuwaczswek.adapters.SelectSectionAdapter;
 import com.lisowski.wojtek.wkuwaczswek.adapters.WordAdapter;
-import com.lisowski.wojtek.wkuwaczswek.Words;
+import com.lisowski.wojtek.wkuwaczswek.entities.Words;
 
 import java.util.ArrayList;
 

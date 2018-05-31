@@ -9,10 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lisowski.wojtek.wkuwaczswek.R;
-import com.lisowski.wojtek.wkuwaczswek.Section;
+import com.lisowski.wojtek.wkuwaczswek.entities.Section;
 
 import java.util.ArrayList;
 

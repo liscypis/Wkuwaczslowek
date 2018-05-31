@@ -14,8 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.lisowski.wojtek.wkuwaczswek.R;
-import com.lisowski.wojtek.wkuwaczswek.Words;
-import com.lisowski.wojtek.wkuwaczswek.activities.ChooseLevel;
+import com.lisowski.wojtek.wkuwaczswek.entities.Words;
 
 import java.util.ArrayList;
 

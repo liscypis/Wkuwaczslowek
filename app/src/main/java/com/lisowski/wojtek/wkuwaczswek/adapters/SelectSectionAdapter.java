@@ -11,7 +11,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.lisowski.wojtek.wkuwaczswek.R;
-import com.lisowski.wojtek.wkuwaczswek.Section;
+import com.lisowski.wojtek.wkuwaczswek.entities.Section;
 
 import java.util.ArrayList;
 

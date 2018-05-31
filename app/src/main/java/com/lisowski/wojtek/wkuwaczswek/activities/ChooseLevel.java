@@ -1,11 +1,8 @@
 package com.lisowski.wojtek.wkuwaczswek.activities;
 
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
@@ -16,9 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lisowski.wojtek.wkuwaczswek.R;
-import com.lisowski.wojtek.wkuwaczswek.Section;
+import com.lisowski.wojtek.wkuwaczswek.entities.Section;
 import com.lisowski.wojtek.wkuwaczswek.adapters.SectionAdapter;
-import com.lisowski.wojtek.wkuwaczswek.Words;
+import com.lisowski.wojtek.wkuwaczswek.entities.Words;
 
 import java.util.ArrayList;
 
@@ -74,6 +71,8 @@ public class ChooseLevel extends AppCompatActivity implements View.OnClickListen
         section1.addWord(w4);
 
         arrayList = new ArrayList<>();
+        arrayList.add(section1);
+        arrayList.add(section1);
         arrayList.add(section1);
         arrayList.add(section2);
         arrayList.add(section3);

@@ -1,8 +1,13 @@
 package com.lisowski.wojtek.wkuwaczswek.activities;
 
+import android.arch.persistence.db.SupportSQLiteDatabase;
+import android.arch.persistence.room.Room;
+import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,11 +20,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lisowski.wojtek.wkuwaczswek.R;
-import com.lisowski.wojtek.wkuwaczswek.Section;
+import com.lisowski.wojtek.wkuwaczswek.database.AppDatabase;
+import com.lisowski.wojtek.wkuwaczswek.entities.Section;
 import com.lisowski.wojtek.wkuwaczswek.adapters.SelectSectionAdapter;
-import com.lisowski.wojtek.wkuwaczswek.Words;
+import com.lisowski.wojtek.wkuwaczswek.entities.Words;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import static android.database.sqlite.SQLiteDatabase.CONFLICT_NONE;
+import static com.lisowski.wojtek.wkuwaczswek.database.AppDatabase.getInstance;
 //TODO pobieranie z bazy i dodawanie :D
 
 public class AddWords extends AppCompatActivity implements View.OnClickListener {
@@ -34,13 +44,14 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
     TextView selectedSectionTextView;
     EditText wordEditText;
     EditText translationEditText;
+    AppDatabase database = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_words);
         context = this.getApplicationContext();
-
+        database = getInstance(context);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         selectSectionButton = (Button) findViewById(R.id.selectSectionButton);
@@ -58,6 +69,7 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
         translationEditText = (EditText) findViewById(R.id.translationEditTx);
         translationEditText.setEnabled(false);
 
+
         ///////////////////////////////////////////////////
         Words w1 = new Words("Tata", "Dad");
         Words w2 = new Words("Mama", "Mom");
@@ -65,44 +77,57 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
         Words w4 = new Words("Siostra", "Sister");
 
         Section section1 = new Section("Rodzina");
-        Section section2 = new Section("Owoce");
-        Section section3 = new Section("Warzywa");
-        Section section4 = new Section("Kolory");
-        Section section5 = new Section("a");
-        Section section6 = new Section("b");
-        Section section7 = new Section("c");
-        Section section8 = new Section("d");
-        Section section9 = new Section("e");
-        Section section10 = new Section("f");
-        Section section11 = new Section("g");
-        Section section12 = new Section("h");
-        Section section13 = new Section("i");
-        Section section14 = new Section("j");
+
         section1.addWord(w1);
         section1.addWord(w2);
         section1.addWord(w3);
         section1.addWord(w4);
 
         arrayList = new ArrayList<Section>();
-        arrayList.add(section1);
-        arrayList.add(section2);
-        arrayList.add(section3);
-        arrayList.add(section4);
-        arrayList.add(section5);
-        arrayList.add(section6);
-        arrayList.add(section7);
-        arrayList.add(section8);
-        arrayList.add(section9);
-        arrayList.add(section10);
-        arrayList.add(section11);
-        arrayList.add(section12);
-        arrayList.add(section13);
-        arrayList.add(section14);
+        new DownloadData().execute();
+//        arrayList.add(section1);
+//        arrayList.add(section2);
+//        arrayList.add(section3);
+//        arrayList.add(section4);
+//        arrayList.add(section5);
+//        arrayList.add(section6);
+//        arrayList.add(section7);
+//        arrayList.add(section8);
+//        arrayList.add(section9);
+//        arrayList.add(section10);
+//        arrayList.add(section11);
+//        arrayList.add(section12);
+//        arrayList.add(section13);
+//        arrayList.add(section14);
         arrayList.add(new Section("dodany"));
 
         sectionAdapter = new SelectSectionAdapter(AddWords.this, R.layout.section_record_select, arrayList);
         ////////////////////////////////
 
+    }
+
+    private class DownloadData extends AsyncTask<Void,Void,Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+//            database.sectionDao().insertAll(new  Section(1, "Rodzina"));
+//            database.wordsDao().insertAll(new Words(1, "xD", "haha", 1));
+            arrayList.addAll(database.sectionDao().getAll());
+            List<Words> sectionList = database.wordsDao().getAll();
+            Log.d(TAG, "onPostExecute: " + arrayList.get(0).getNameOfSection());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+
+            super.onPostExecute(aVoid);
+        }
     }
 
     @Override

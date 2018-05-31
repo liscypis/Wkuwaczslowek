@@ -9,8 +9,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.lisowski.wojtek.wkuwaczswek.R;
-import com.lisowski.wojtek.wkuwaczswek.Section;
-import com.lisowski.wojtek.wkuwaczswek.Words;
+import com.lisowski.wojtek.wkuwaczswek.entities.Section;
+import com.lisowski.wojtek.wkuwaczswek.entities.Words;
 import com.lisowski.wojtek.wkuwaczswek.adapters.SelectSectionAdapter;
 import com.lisowski.wojtek.wkuwaczswek.adapters.WordPreviewAdapter;
 
