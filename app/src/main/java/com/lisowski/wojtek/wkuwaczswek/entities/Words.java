@@ -6,7 +6,8 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
-@Entity(foreignKeys = @ForeignKey(entity = Section.class, parentColumns = "sid", childColumns = "section_id"))
+
+@Entity
 public class Words {
     @PrimaryKey
     private int wid;
@@ -73,23 +74,26 @@ public class Words {
         isSelected = selected;
     }
 
-    public static Words[] populateData() {
+    public static Words[] populateDataWords() {
         return new Words[]{
-                new Words(0, "Tata", "Dad", 0),
                 new Words(1, "Tata", "Dad", 0),
                 new Words(2, "Tata", "Dad", 0),
                 new Words(3, "Tata", "Dad", 0),
                 new Words(4, "Tata", "Dad", 0),
                 new Words(5, "Tata", "Dad", 0),
                 new Words(6, "Tata", "Dad", 0),
+                new Words(7, "Tata", "Dad", 0),
         };
     }
 
     @Override
     public String toString() {
         return "Words{" +
-                "word='" + word + '\'' +
+                "wid=" + wid +
+                ", word='" + word + '\'' +
                 ", translation='" + translation + '\'' +
+                ", section_id=" + section_id +
+                ", isSelected=" + isSelected +
                 '}';
     }
 }

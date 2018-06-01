@@ -16,6 +16,9 @@ public interface SectionDao {
     @Query("SELECT * FROM Section WHERE sid IN (:sectionsIds)")
     List<Section> loadAllByIds(int[] sectionsIds);
 
+    @Query("SELECT sid FROM Section WHERE sid = (SELECT max(sid) FROM Section)")
+    int getLastID();
+
     @Insert
     void insertAll(Section... sections);
 }

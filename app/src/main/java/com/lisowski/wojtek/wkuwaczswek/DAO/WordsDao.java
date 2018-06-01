@@ -16,7 +16,16 @@ public interface WordsDao {
     @Query("SELECT * FROM Words WHERE wid IN (:wordsIds)")
     List<Words> loadAllByIds(int[] wordsIds);
 
+    @Query("SELECT wid FROM Words WHERE wid = (SELECT max(wid) FROM Words)")
+    int getLastID();
+
+    @Query("SELECT word FROM WORDS WHERE word in (:wordIN)")
+    String isIn(String wordIN);
+
     @Insert
     void insertAll(Words... words);
+
+
+
 
 }

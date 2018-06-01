@@ -17,6 +17,7 @@ import java.util.concurrent.Executors;
 
 @Database(entities = {Words.class, Section.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
+
     public abstract WordsDao wordsDao();
     public abstract SectionDao sectionDao();
 
@@ -34,26 +35,25 @@ public abstract class AppDatabase extends RoomDatabase {
     }
 
     private static AppDatabase buildDatabase(final Context context) {
-        return Room.databaseBuilder(context, AppDatabase.class, "databas")
+        return Room.databaseBuilder(context, AppDatabase.class, "database")
                 .addCallback(new Callback() {
                     @Override
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {
-                        //super.onCreate(db);
+                        super.onCreate(db);
                         Executors.newSingleThreadScheduledExecutor().execute(new Runnable() {
                             @Override
                             public void run() {
-                                Log.d(TAG, "xD: start");
-                                getInstance(context).sectionDao().insertAll(Section.populateData());
-                                getInstance(context).wordsDao().insertAll(Words.populateData());
                                 Log.d(TAG, "run: stop");
+                                INSTANCE.sectionDao().insertAll(Section.populateData());
+                                Log.d(TAG, "chuju dobrze");
+                                INSTANCE.wordsDao().insertAll(Words.populateDataWords());
                             }
                         });
                     }
 
                     @Override
                     public void onOpen(@NonNull SupportSQLiteDatabase db) {
-                        Log.d(TAG, "chuju dobrze");
-                        super.onOpen(db);
+
                     }
                 })
                 .build();

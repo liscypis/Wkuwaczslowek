@@ -1,13 +1,9 @@
 package com.lisowski.wojtek.wkuwaczswek.activities;
 
-import android.arch.persistence.db.SupportSQLiteDatabase;
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -20,15 +16,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lisowski.wojtek.wkuwaczswek.R;
+import com.lisowski.wojtek.wkuwaczswek.adapters.SelectSectionAdapter;
 import com.lisowski.wojtek.wkuwaczswek.database.AppDatabase;
 import com.lisowski.wojtek.wkuwaczswek.entities.Section;
-import com.lisowski.wojtek.wkuwaczswek.adapters.SelectSectionAdapter;
 import com.lisowski.wojtek.wkuwaczswek.entities.Words;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import static android.database.sqlite.SQLiteDatabase.CONFLICT_NONE;
 import static com.lisowski.wojtek.wkuwaczswek.database.AppDatabase.getInstance;
 //TODO pobieranie z bazy i dodawanie :D
 
@@ -36,6 +30,7 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
 
     private static final String TAG = "AddWords";
     private ArrayList<Section> arrayList = null;
+    private ArrayList<Words> wordsArrayList = null;
     SelectSectionAdapter sectionAdapter = null;
     Button selectSectionButton;
     Button addSectionButton;
@@ -70,56 +65,24 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
         translationEditText.setEnabled(false);
 
 
-        ///////////////////////////////////////////////////
-        Words w1 = new Words("Tata", "Dad");
-        Words w2 = new Words("Mama", "Mom");
-        Words w3 = new Words("Brat", "Brother");
-        Words w4 = new Words("Siostra", "Sister");
-
-        Section section1 = new Section("Rodzina");
-
-        section1.addWord(w1);
-        section1.addWord(w2);
-        section1.addWord(w3);
-        section1.addWord(w4);
-
         arrayList = new ArrayList<Section>();
         new DownloadData().execute();
-//        arrayList.add(section1);
-//        arrayList.add(section2);
-//        arrayList.add(section3);
-//        arrayList.add(section4);
-//        arrayList.add(section5);
-//        arrayList.add(section6);
-//        arrayList.add(section7);
-//        arrayList.add(section8);
-//        arrayList.add(section9);
-//        arrayList.add(section10);
-//        arrayList.add(section11);
-//        arrayList.add(section12);
-//        arrayList.add(section13);
-//        arrayList.add(section14);
-        arrayList.add(new Section("dodany"));
 
         sectionAdapter = new SelectSectionAdapter(AddWords.this, R.layout.section_record_select, arrayList);
-        ////////////////////////////////
 
     }
 
-    private class DownloadData extends AsyncTask<Void,Void,Void> {
-
+    private class DownloadData extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            wordsArrayList = new ArrayList<>();
         }
+
         @Override
         protected Void doInBackground(Void... voids) {
-
-//            database.sectionDao().insertAll(new  Section(1, "Rodzina"));
-//            database.wordsDao().insertAll(new Words(1, "xD", "haha", 1));
             arrayList.addAll(database.sectionDao().getAll());
-            List<Words> sectionList = database.wordsDao().getAll();
-            Log.d(TAG, "onPostExecute: " + arrayList.get(0).getNameOfSection());
+            wordsArrayList.addAll(database.wordsDao().getAll());
             return null;
         }
 
@@ -134,19 +97,20 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.selectSectionButton:
-                showDialog();
+                selectSectionDialog();
                 break;
             case R.id.addSectionButton:
                 showAddSectionDialog();
                 break;
             case R.id.addWordButton:
                 checkEditText();
+                print();
                 break;
             default:
         }
     }
 
-    private void showDialog() {
+    private void selectSectionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("Wybierz dział");
@@ -158,11 +122,10 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                for (Object o : arrayList) {
-                    Section s = (Section) o;
-                    if (s.isSelected()) {
+                for (Section section : arrayList) {
+                    if (section.isSelected()) {
                         selectedSectionTextView.setVisibility(View.VISIBLE);
-                        selectedSectionTextView.setText("Wybrany dział: " + s.toString());
+                        selectedSectionTextView.setText("Wybrany dział: " + section.toString());
                         wordEditText.setEnabled(true);
                         translationEditText.setEnabled(true);
                     }
@@ -189,12 +152,20 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (!ed.getText().toString().equals("") && !checkSection(ed.getText().toString())) {
-                    arrayList.add(new Section(ed.getText().toString()));
-                    Toast toast = Toast.makeText(context, "DODANO DZIAŁ: " + ed.getText().toString(), Toast.LENGTH_LONG);
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            final int maxID = database.sectionDao().getLastID() + 1;
+                            arrayList.add(new Section(maxID, ed.getText().toString()));
+                            database.sectionDao().insertAll(new Section(maxID, ed.getText().toString()));
+                        }
+                    }.start();
+
+                    Toast toast = Toast.makeText(context, "DODANO DZIAŁ: " + ed.getText().toString(), Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.BOTTOM, 0, 200);
                     toast.show();
                 } else {
-                    Toast toast = Toast.makeText(context, "TAKI DZIAŁ JUŻ WYSTĘPUJE", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(context, "TAKI DZIAŁ JUŻ WYSTĘPUJE", Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.BOTTOM, 0, 200);
                     toast.show();
                 }
@@ -223,23 +194,21 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
     }
 
     private void addWord() {
-        ArrayList<Words> wordList = null;
-        Section s = null;
         boolean isIn = false;
+        int idSection = -1;
 
-        for (Section o : arrayList) {
-            s = o;
-            if (s.isSelected()) {
-                wordList = s.getWordsArrayList();
+        for (Section section : arrayList) {
+            if (section.isSelected()) {
+                idSection = section.getSid();
                 break;
             }
         }
-        for (Words w: wordList) {
-            if(w.getWord().equals(wordEditText.getText().toString())){
+        for (Words w : wordsArrayList) {
+            if (w.getWord().equals(wordEditText.getText().toString())) {
                 isIn = true;
             }
         }
-        if(isIn) {
+        if (isIn) {
             Toast toast = Toast.makeText(context, "SŁOWO JUŻ WYSTĘPUJE W BAZIE ", Toast.LENGTH_LONG);
             toast.setGravity(Gravity.BOTTOM, 0, 200);
             toast.show();
@@ -247,28 +216,45 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
             Toast toast = Toast.makeText(context, "Dodano " + wordEditText.getText().toString() + " - " + translationEditText.getText().toString(), Toast.LENGTH_LONG);
             toast.setGravity(Gravity.BOTTOM, 0, 200);
             toast.show();
-            s.addWord(new Words(wordEditText.getText().toString(), translationEditText.getText().toString()));
-            showWordsInSection ();
-            wordEditText.setText("");
-            translationEditText.setText("");
+
+            final int fIdSec = idSection;
+            new Thread() {
+                @Override
+                public void run() {
+                    final int idw = database.wordsDao().getLastID() + 1;
+                    database.wordsDao().insertAll(new Words(idw, wordEditText.getText().toString(), translationEditText.getText().toString(), fIdSec));
+                    wordsArrayList.addAll(database.wordsDao().getAll());
+                    wordEditText.setText("");
+                    translationEditText.setText("");
+                }
+            }.start();
         }
     }
+
+
     // zwraca true jak nazwa sekcji juz wystepuje
     private boolean checkSection(String s) {
-        for (Section o : arrayList) {
-            Section section = o;
+        for (Section section : arrayList) {
             if (section.getNameOfSection().equals(s)) {
                 return true;
             }
         }
         return false;
     }
+    private void print() {
+        ArrayList<Words> ar  = new ArrayList<>();
+        new Thread() {
+            @Override
+            public void run() {
+                ar.addAll(database.wordsDao().getAll());
+                for (Words w: ar) {
+                    Log.d(TAG, "print: "+ w.getWid() + " " + w.getWord() + " " + w.getTranslation() + " " + w.getSection_id());
+                }
+            }
+
+        }.start();
 
 
-    private void showWordsInSection () {
-        Section s = arrayList.get(0);
-        s.printWords();
-        s = arrayList.get(1);
-        s.printWords();
     }
+
 }
