@@ -82,7 +82,6 @@ public class EditWord extends AppCompatActivity implements View.OnClickListener 
         @Override
         protected Void doInBackground(Void... voids) {
             arrayList.addAll(database.sectionDao().getAll());
-//            wordsArrayList.addAll(database.wordsDao().getAll());
             sectionAdapter = new SelectSectionAdapter(EditWord.this, R.layout.section_record_select, arrayList);
             wordAdapter = new WordAdapter(EditWord.this, R.layout.word_record, wordsArrayList);
             return null;

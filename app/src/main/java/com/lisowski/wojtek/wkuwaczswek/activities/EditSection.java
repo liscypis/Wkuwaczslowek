@@ -2,9 +2,10 @@ package com.lisowski.wojtek.wkuwaczswek.activities;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -14,35 +15,40 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lisowski.wojtek.wkuwaczswek.R;
-import com.lisowski.wojtek.wkuwaczswek.entities.Section;
 import com.lisowski.wojtek.wkuwaczswek.adapters.SelectSectionAdapter;
-import com.lisowski.wojtek.wkuwaczswek.entities.Words;
+import com.lisowski.wojtek.wkuwaczswek.database.AppDatabase;
+import com.lisowski.wojtek.wkuwaczswek.entities.Section;
 
 import java.util.ArrayList;
 
+import static com.lisowski.wojtek.wkuwaczswek.database.AppDatabase.getInstance;
+
 public class EditSection extends AppCompatActivity implements View.OnClickListener {
 
-    Button selSecToEditBtn;
-    Button deleteSectionBtn;
-    Button changeNameSecBtn;
-    Button saveChangesBtn;
-    TextView selectedSecTv;
-    TextView newNameTv;
-    EditText newNameSectionEt;
-    SelectSectionAdapter sectionAdapter;
+    private Button selSecToEditBtn;
+    private Button deleteSectionBtn;
+    private Button changeNameSecBtn;
+    private Button saveChangesBtn;
+    private TextView selectedSecTv;
+    private TextView newNameTv;
+    private EditText newNameSectionEt;
 
+    private SelectSectionAdapter sectionAdapter = null;
+    private AppDatabase database = null;
 
-    Context context;
-    private static final String TAG = "EditSection";
+    private Context context;
     private ArrayList<Section> arrayList = null;
+
+    private static final String TAG = "EditSection";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_section);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         context = getApplicationContext();
+
+        database = getInstance(context);
 
         selSecToEditBtn = (Button) findViewById(R.id.selSecToEditBtn);
         selSecToEditBtn.setOnClickListener(this);
@@ -68,52 +74,23 @@ public class EditSection extends AppCompatActivity implements View.OnClickListen
         newNameSectionEt = (EditText) findViewById(R.id.newNameSectionEt);
         newNameSectionEt.setVisibility(View.INVISIBLE);
 
+        new DownloadData().execute();
 
+    }
 
-        ///////////////////////////////////////////////////
-        Words w1 = new Words("Tata", "Dad");
-        Words w2 = new Words("Mama", "Mom");
-        Words w3 = new Words("Brat", "Brother");
-        Words w4 = new Words("Siostra", "Sister");
+    private class DownloadData extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            arrayList = new ArrayList<>();
+        }
 
-        Section section1 = new Section("Rodzina");
-        Section section2 = new Section("Owoce");
-        Section section3 = new Section("Warzywa");
-        Section section4 = new Section("Kolory");
-        Section section5 = new Section("a");
-        Section section6 = new Section("b");
-        Section section7 = new Section("c");
-        Section section8 = new Section("d");
-        Section section9 = new Section("e");
-        Section section10 = new Section("f");
-        Section section11 = new Section("g");
-        Section section12 = new Section("h");
-        Section section13 = new Section("i");
-        Section section14 = new Section("j");
-        section1.addWord(w1);
-        section1.addWord(w2);
-        section1.addWord(w3);
-        section1.addWord(w4);
-
-        arrayList = new ArrayList<Section>();
-        arrayList.add(section1);
-        arrayList.add(section2);
-        arrayList.add(section3);
-        arrayList.add(section4);
-        arrayList.add(section5);
-        arrayList.add(section6);
-        arrayList.add(section7);
-        arrayList.add(section8);
-        arrayList.add(section9);
-        arrayList.add(section10);
-        arrayList.add(section11);
-        arrayList.add(section12);
-        arrayList.add(section13);
-        arrayList.add(section14);
-        arrayList.add(new Section("dodany"));
-
-
-        ////////////////////////////////
+        @Override
+        protected Void doInBackground(Void... voids) {
+            arrayList.addAll(database.sectionDao().getAll());
+            sectionAdapter = new SelectSectionAdapter(EditSection.this, R.layout.section_record_select, arrayList);
+            return null;
+        }
     }
 
     @Override
@@ -138,10 +115,6 @@ public class EditSection extends AppCompatActivity implements View.OnClickListen
 
     private void showSectionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        for (Section section : arrayList){
-            section.setSelected(false);
-        }
-        sectionAdapter = new SelectSectionAdapter(EditSection.this, R.layout.section_record_select, arrayList);
         builder.setTitle("Wybierz dział");
         builder.setAdapter(sectionAdapter, new DialogInterface.OnClickListener() {
             @Override
@@ -166,7 +139,7 @@ public class EditSection extends AppCompatActivity implements View.OnClickListen
         builder.setNegativeButton("Anuluj", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                for (Section section : arrayList){
+                for (Section section : arrayList) {
                     section.setSelected(false);
                 }
                 selectedSecTv.setVisibility(View.INVISIBLE);
@@ -183,20 +156,30 @@ public class EditSection extends AppCompatActivity implements View.OnClickListen
     private void deleteSectionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("UWAGA!");
-        builder.setMessage("Czy na pewno usunąć?");
+        builder.setMessage("Przy usuwaniu działu zostają usunięte również wszystkie słówka znajdujące się w tym dziale!");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                Section tmpSection = null;
                 for (Section section : arrayList) {
                     if (section.isSelected()) {
+                        tmpSection = section;
                         arrayList.remove(section);
                         break;
                     }
                 }
+                final Section fSection = tmpSection;
+                new Thread() {
+                    @Override
+                    public void run() {
+                        database.sectionDao().delete(fSection);
+                    }
+                }.start();
+
                 selectedSecTv.setText("");
                 deleteSectionBtn.setEnabled(false);
                 changeNameSecBtn.setEnabled(false);
-                Toast toast = Toast.makeText(context, "Usunięto", Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(context, "Usunięto", Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.BOTTOM, 0, 200);
                 toast.show();
             }
@@ -206,6 +189,7 @@ public class EditSection extends AppCompatActivity implements View.OnClickListen
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
     private void changeSectionName() {
         deleteSectionBtn.setVisibility(View.INVISIBLE);
         changeNameSecBtn.setVisibility(View.INVISIBLE);
@@ -213,18 +197,29 @@ public class EditSection extends AppCompatActivity implements View.OnClickListen
         newNameSectionEt.setVisibility(View.VISIBLE);
         saveChangesBtn.setEnabled(true);
     }
+
     private void updateNameSection() {
-        if(newNameSectionEt.getText().toString().equals("")){
-            Toast toast = Toast.makeText(context, "Podaj nową nazwę!", Toast.LENGTH_LONG);
+        if (checkNewSectionName()) {
+            Toast toast = Toast.makeText(context, "Podaj inną nazwę", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.BOTTOM, 0, 200);
             toast.show();
         } else {
+            Section tmpSection = null;
             for (Section section : arrayList) {
                 if (section.isSelected()) {
+                    tmpSection = section;
                     section.setNameOfSection(newNameSectionEt.getText().toString());
                     break;
                 }
             }
+            final Section fSection = tmpSection;
+            new Thread() {
+                @Override
+                public void run() {
+                    database.sectionDao().updateSection(fSection);
+                }
+            }.start();
+
             Toast toast = Toast.makeText(context, "Zapisano zmiany", Toast.LENGTH_LONG);
             toast.setGravity(Gravity.BOTTOM, 0, 200);
             toast.show();
@@ -238,5 +233,17 @@ public class EditSection extends AppCompatActivity implements View.OnClickListen
             newNameSectionEt.setVisibility(View.INVISIBLE);
             saveChangesBtn.setEnabled(false);
         }
+    }
+
+    // Zwraca false jak nie ma takiej nazwy
+    boolean checkNewSectionName() {
+        if (newNameSectionEt.getText().toString().equals(""))
+            return true;
+        for (Section section : arrayList) {
+            if (section.getNameOfSection().equals(newNameSectionEt.getText().toString())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

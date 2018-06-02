@@ -1,8 +1,10 @@
 package com.lisowski.wojtek.wkuwaczswek.DAO;
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.lisowski.wojtek.wkuwaczswek.entities.Section;
 
@@ -21,4 +23,10 @@ public interface SectionDao {
 
     @Insert
     void insertAll(Section... sections);
+
+    @Delete
+    void delete(Section sections);
+
+    @Update
+    void updateSection(Section section);
 }
