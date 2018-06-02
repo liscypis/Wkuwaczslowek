@@ -225,10 +225,20 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
                     final int idw = database.wordsDao().getLastID() + 1;
                     database.wordsDao().insertAll(new Words(idw, wordEditText.getText().toString(), translationEditText.getText().toString(), fIdSec));
                     wordsArrayList.addAll(database.wordsDao().getAll());
+                }
+            }.start();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     wordEditText.setText("");
                     translationEditText.setText("");
                 }
-            }.start();
+            });
         }
     }
 

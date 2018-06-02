@@ -4,6 +4,7 @@ package com.lisowski.wojtek.wkuwaczswek.DAO;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.lisowski.wojtek.wkuwaczswek.entities.Words;
 
@@ -13,8 +14,8 @@ public interface WordsDao {
     @Query("SELECT * FROM Words")
     List<Words> getAll();
 
-    @Query("SELECT * FROM Words WHERE wid IN (:wordsIds)")
-    List<Words> loadAllByIds(int[] wordsIds);
+    @Query("SELECT * FROM Words WHERE section_id IN (:sectionID)")
+    List<Words> loadAllBySectionId(int sectionID);
 
     @Query("SELECT wid FROM Words WHERE wid = (SELECT max(wid) FROM Words)")
     int getLastID();
@@ -25,6 +26,8 @@ public interface WordsDao {
     @Insert
     void insertAll(Words... words);
 
+    @Update
+    public void updateWords(Words... words);
 
 
 
