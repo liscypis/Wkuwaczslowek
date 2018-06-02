@@ -2,6 +2,7 @@ package com.lisowski.wojtek.wkuwaczswek.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,11 +14,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lisowski.wojtek.wkuwaczswek.R;
+import com.lisowski.wojtek.wkuwaczswek.adapters.SelectSectionAdapter;
+import com.lisowski.wojtek.wkuwaczswek.database.AppDatabase;
 import com.lisowski.wojtek.wkuwaczswek.entities.Section;
 import com.lisowski.wojtek.wkuwaczswek.adapters.SectionAdapter;
 import com.lisowski.wojtek.wkuwaczswek.entities.Words;
 
 import java.util.ArrayList;
+
+import static com.lisowski.wojtek.wkuwaczswek.database.AppDatabase.getInstance;
 
 public class ChooseLevel extends AppCompatActivity implements View.OnClickListener {
 
@@ -27,13 +32,16 @@ public class ChooseLevel extends AppCompatActivity implements View.OnClickListen
     private Button goBtn;
     private TextView selectedSectionsTV;
     private ArrayList<Section> arrayList;
-    SectionAdapter sectionAdapter = null;
+    private SectionAdapter sectionAdapter = null;
+    private AppDatabase database = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_level);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        database = getInstance(getApplicationContext());
 
         rdGrp = findViewById(R.id.rdGrp);
         goBtn = findViewById(R.id.goBtn);
@@ -45,55 +53,24 @@ public class ChooseLevel extends AppCompatActivity implements View.OnClickListen
         selectedSectionsTV.setText("");
         selectedSectionsTV.setMovementMethod(new ScrollingMovementMethod());
 
-        ///////////////////////////////////////
-        Words w1 = new Words("Tata", "Dad");
-        Words w2 = new Words("Mama", "Mom");
-        Words w3 = new Words("Brat", "Brother");
-        Words w4 = new Words("Siostra", "Sister");
-
-        Section section1 = new Section("Rodzina");
-        Section section2 = new Section("Owoce");
-        Section section3 = new Section("Warzywa");
-        Section section4 = new Section("Kolory");
-        Section section5 = new Section("a");
-        Section section6 = new Section("b");
-        Section section7 = new Section("c");
-        Section section8 = new Section("d");
-        Section section9 = new Section("e");
-        Section section10 = new Section("f");
-        Section section11 = new Section("g");
-        Section section12 = new Section("h");
-        Section section13 = new Section("i");
-        Section section14 = new Section("j");
-        section1.addWord(w1);
-        section1.addWord(w2);
-        section1.addWord(w3);
-        section1.addWord(w4);
-
-        arrayList = new ArrayList<>();
-        arrayList.add(section1);
-        arrayList.add(section1);
-        arrayList.add(section1);
-        arrayList.add(section2);
-        arrayList.add(section3);
-        arrayList.add(section4);
-        arrayList.add(section5);
-        arrayList.add(section6);
-        arrayList.add(section7);
-        arrayList.add(section8);
-        arrayList.add(section9);
-        arrayList.add(section10);
-        arrayList.add(section11);
-        arrayList.add(section12);
-        arrayList.add(section13);
-        arrayList.add(section14);
-
-
-        sectionAdapter = new SectionAdapter(ChooseLevel.this, R.layout.section_record, arrayList);
-        ///////////////////////////////
+        new DownloadData().execute();
 
     }
 
+    private class DownloadData extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            arrayList = new ArrayList<>();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            arrayList.addAll(database.sectionDao().getAll());
+            sectionAdapter = new SectionAdapter(ChooseLevel.this, R.layout.section_record, arrayList);
+            return null;
+        }
+    }
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -148,13 +125,33 @@ public class ChooseLevel extends AppCompatActivity implements View.OnClickListen
             if (rdGrp.getCheckedRadioButtonId() == R.id.easyBtn) {
                 //TODO tu się wyśle wybrane działy albo i nie :D
                 intent = new Intent(this, EasyTest.class);
+                intent.putExtra("IDsSECTIONs", idSelectedSections());
             } else {
                 intent = new Intent(this, DifficultTest.class);
+                intent.putExtra("IDsSECTIONs", idSelectedSections());
             }
             startActivity(intent);
         } else {
             Toast.makeText(this, "Wybierz dział!", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private int[] idSelectedSections(){
+        int counter = 0;
+        for (Section section : arrayList) {
+            if (section.isSelected()) {
+                counter++;
+            }
+        }
+        int[] idsArray = new int[counter];
+        int i = 0;
+        for (Section section : arrayList) {
+            if (section.isSelected()) {
+                idsArray[i] = section.getSid();
+                i++;
+            }
+        }
+        return idsArray;
     }
 }
 

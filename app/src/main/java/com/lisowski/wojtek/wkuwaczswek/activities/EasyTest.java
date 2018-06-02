@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import com.lisowski.wojtek.wkuwaczswek.R;
 import com.lisowski.wojtek.wkuwaczswek.entities.Words;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class EasyTest extends AppCompatActivity implements View.OnClickListener {
 
@@ -26,6 +28,8 @@ public class EasyTest extends AppCompatActivity implements View.OnClickListener 
     private Button ans4Btn;
 
     private Context context;
+
+    private static final String TAG = "EasyTest";
 
     ArrayList<Words> arrayList = null;
     String answer = "";
@@ -49,6 +53,9 @@ public class EasyTest extends AppCompatActivity implements View.OnClickListener 
         ans4Btn = (Button) findViewById(R.id.ans4Btn);
         ans4Btn.setOnClickListener(this);
 
+        // pobieranie id sekcji!
+        int[] arrayIDs = getIntent().getIntArrayExtra("IDsSECTIONs");
+        Log.d(TAG, "onCreate: " + Arrays.toString(arrayIDs));
 
         /////////////////////////////
         arrayList = new ArrayList<Words>();
