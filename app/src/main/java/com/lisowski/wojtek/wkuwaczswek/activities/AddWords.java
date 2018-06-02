@@ -46,8 +46,11 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_words);
         context = this.getApplicationContext();
-        database = getInstance(context);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        database = getInstance(context);
+
 
         selectSectionButton = (Button) findViewById(R.id.selectSectionButton);
         selectSectionButton.setOnClickListener(this);
@@ -64,12 +67,7 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
         translationEditText = (EditText) findViewById(R.id.translationEditTx);
         translationEditText.setEnabled(false);
 
-
-        arrayList = new ArrayList<Section>();
         new DownloadData().execute();
-
-        sectionAdapter = new SelectSectionAdapter(AddWords.this, R.layout.section_record_select, arrayList);
-
     }
 
     private class DownloadData extends AsyncTask<Void, Void, Void> {
@@ -77,12 +75,15 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
         protected void onPreExecute() {
             super.onPreExecute();
             wordsArrayList = new ArrayList<>();
+            arrayList = new ArrayList<>();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
             arrayList.addAll(database.sectionDao().getAll());
             wordsArrayList.addAll(database.wordsDao().getAll());
+            Log.d(TAG, "run: arralist" + arrayList.get(0).getNameOfSection());
+            sectionAdapter = new SelectSectionAdapter(AddWords.this, R.layout.section_record_select, arrayList);
             return null;
         }
 
@@ -111,8 +112,8 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
     }
 
     private void selectSectionDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Wybierz dział");
         builder.setAdapter(sectionAdapter, new DialogInterface.OnClickListener() {
             @Override
@@ -241,14 +242,15 @@ public class AddWords extends AppCompatActivity implements View.OnClickListener 
         }
         return false;
     }
+
     private void print() {
-        ArrayList<Words> ar  = new ArrayList<>();
+        ArrayList<Words> ar = new ArrayList<>();
         new Thread() {
             @Override
             public void run() {
                 ar.addAll(database.wordsDao().getAll());
-                for (Words w: ar) {
-                    Log.d(TAG, "print: "+ w.getWid() + " " + w.getWord() + " " + w.getTranslation() + " " + w.getSection_id());
+                for (Words w : ar) {
+                    Log.d(TAG, "print: " + w.getWid() + " " + w.getWord() + " " + w.getTranslation() + " " + w.getSection_id());
                 }
             }
 

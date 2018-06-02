@@ -6,8 +6,13 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
+import static android.arch.persistence.room.ForeignKey.CASCADE;
 
-@Entity
+
+@Entity(foreignKeys = @ForeignKey(entity = Section.class,
+        parentColumns = "sid",
+        childColumns = "section_id",
+        onDelete = CASCADE))
 public class Words {
     @PrimaryKey
     private int wid;
@@ -76,13 +81,13 @@ public class Words {
 
     public static Words[] populateDataWords() {
         return new Words[]{
-                new Words(1, "Tata", "Dad", 0),
-                new Words(2, "Tata", "Dad", 0),
-                new Words(3, "Tata", "Dad", 0),
-                new Words(4, "Tata", "Dad", 0),
-                new Words(5, "Tata", "Dad", 0),
-                new Words(6, "Tata", "Dad", 0),
-                new Words(7, "Tata", "Dad", 0),
+                new Words(1, "Tata", "Dad", 1),
+                new Words(2, "Tata", "Dad", 1),
+                new Words(3, "Tata", "Dad", 1),
+                new Words(4, "Tata", "Dad", 1),
+                new Words(5, "Tata", "Dad", 1),
+                new Words(6, "Tata", "Dad", 1),
+                new Words(7, "Tata", "Dad", 1),
         };
     }
 

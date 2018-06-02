@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.Button;
 
 import com.lisowski.wojtek.wkuwaczswek.R;
+import com.lisowski.wojtek.wkuwaczswek.database.AppDatabase;
+
+import static com.lisowski.wojtek.wkuwaczswek.database.AppDatabase.getInstance;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -14,8 +17,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         setContentView(R.layout.activity_main);
 
         Button testBtn = findViewById(R.id.testBtn);
