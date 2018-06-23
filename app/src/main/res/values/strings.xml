@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Wkuwacz słówek</string>
+    <string name="app_name" translatable="false">Wkuwacz słówek</string>
     <string name="easyTest">Łatwy test</string>
     <string name="difficultTest">Trudny test</string>
     <string name="editWord">Edycja słówek</string>

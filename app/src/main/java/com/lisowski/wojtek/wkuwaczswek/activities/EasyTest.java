@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.lisowski.wojtek.wkuwaczswek.R;
+import com.lisowski.wojtek.wkuwaczswek.database.AppDatabase;
 import com.lisowski.wojtek.wkuwaczswek.entities.Words;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class EasyTest extends AppCompatActivity implements View.OnClickListener 
     private Button ans4Btn;
 
     private Context context;
+    private AppDatabase database = null;
 
     private static final String TAG = "EasyTest";
 
@@ -41,6 +43,7 @@ public class EasyTest extends AppCompatActivity implements View.OnClickListener 
         setContentView(R.layout.activity_easy_test);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         context = getApplicationContext();
+        database = AppDatabase.getInstance(context);
 
         wordEasyTv = (TextView) findViewById(R.id.wordEasyTv);
 
@@ -57,24 +60,19 @@ public class EasyTest extends AppCompatActivity implements View.OnClickListener 
         int[] arrayIDs = getIntent().getIntArrayExtra("IDsSECTIONs");
         Log.d(TAG, "onCreate: " + Arrays.toString(arrayIDs));
 
-        /////////////////////////////
-        arrayList = new ArrayList<Words>();
-        Words w1 = new Words("Tata", "Dad");
-        Words w2 = new Words("Mama", "Mom");
-        Words w3 = new Words("Brat", "Brother");
-        Words w4 = new Words("Siostra", "Sister");
-        arrayList.add(w1);
-        arrayList.add(w2);
-        arrayList.add(w3);
-        arrayList.add(w4);
-
-        /////////////////////////
-        wordEasyTv.setText(arrayList.get(0).getWord());
-        answer = arrayList.get(0).getTranslation();
-        ans1Btn.setText(arrayList.get(0).getTranslation());
-        ans2Btn.setText(arrayList.get(1).getTranslation());
-        ans3Btn.setText(arrayList.get(2).getTranslation());
-        ans4Btn.setText(arrayList.get(3).getTranslation());
+        new Thread() {
+            @Override
+            public void run() {
+                arrayList = new ArrayList<>();
+                arrayList.addAll(database.wordsDao().loadAllBySectionIds(arrayIDs));
+                wordEasyTv.setText(arrayList.get(0).getWord());
+                answer = arrayList.get(0).getTranslation();
+                ans1Btn.setText(arrayList.get(0).getTranslation());
+                ans2Btn.setText(arrayList.get(1).getTranslation());
+                ans3Btn.setText(arrayList.get(2).getTranslation());
+                ans4Btn.setText(arrayList.get(3).getTranslation());
+            }
+        }.start();
     }
 
     @Override

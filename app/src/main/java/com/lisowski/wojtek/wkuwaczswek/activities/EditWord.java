@@ -103,7 +103,6 @@ public class EditWord extends AppCompatActivity implements View.OnClickListener 
                 showWordsDialog();
                 break;
             case R.id.saveEditedWordBtn:
-                //TODO zapis do bazy
                 checkEditText();
                 break;
             default:

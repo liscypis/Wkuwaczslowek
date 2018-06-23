@@ -17,6 +17,9 @@ public interface WordsDao {
     @Query("SELECT * FROM Words WHERE section_id IN (:sectionID)")
     List<Words> loadAllBySectionId(int sectionID);
 
+    @Query("SELECT * FROM Words WHERE section_id IN (:sectionIDs)")
+    List<Words> loadAllBySectionIds(int[] sectionIDs);
+
     @Query("SELECT wid FROM Words WHERE wid = (SELECT max(wid) FROM Words)")
     int getLastID();
 

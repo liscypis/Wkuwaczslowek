@@ -20,7 +20,7 @@ public class WordAdapter extends ArrayAdapter {
     private final int layoutResource;
     private final LayoutInflater layoutInflater;
     private ArrayList<Words> arrayList;
-    RadioButton selected = null;
+    private static RadioButton selected = null;
 
 
     public WordAdapter(@NonNull Context context, int resource, ArrayList<Words> arrayList) {
@@ -28,6 +28,7 @@ public class WordAdapter extends ArrayAdapter {
         this.layoutResource = resource;
         this.layoutInflater = LayoutInflater.from(context);
         this.arrayList = arrayList;
+        //arrayList.get(0).setSelected(true);
     }
 
     @Override
@@ -50,26 +51,23 @@ public class WordAdapter extends ArrayAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Words currentApp = arrayList.get(position);
-
         viewHolder.wordRadioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Integer pos = (Integer) viewHolder.wordRadioButton.getTag();
-                if (selected != null) {
-                    selected.setChecked(false);
-                    int id = (int) selected.getTag();
-                    arrayList.get(id).setSelected(false);
+                for (Words w : arrayList) {
+                    w.setSelected(false);
                 }
-                viewHolder.wordRadioButton.setChecked(true);
-                selected = viewHolder.wordRadioButton;
                 arrayList.get(pos).setSelected(true);
-
+                notifyDataSetChanged();
             }
         });
+        Words currentApp = arrayList.get(position);
+
         viewHolder.wordRadioButton.setTag(position);
         viewHolder.wordTV.setText(currentApp.getWord());
         viewHolder.translationTV.setText(currentApp.getTranslation());
+        viewHolder.wordRadioButton.setChecked(currentApp.isSelected());
 
         return convertView;
     }
@@ -84,6 +82,5 @@ public class WordAdapter extends ArrayAdapter {
             this.translationTV = (TextView) v.findViewById(R.id.previewTranslationTV);
             this.wordRadioButton = (RadioButton) v.findViewById(R.id.wordRadioButton);
         }
-
     }
 }

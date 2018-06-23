@@ -56,19 +56,19 @@ public class SelectSectionAdapter extends ArrayAdapter {
             @Override
             public void onClick(View view) {
                 Integer pos = (Integer) viewHolder.sectionCheck.getTag();
-                if (selected != null) {
-                    selected.setChecked(false);
-                    int id = (int) selected.getTag();
-                    arrayList.get(id).setSelected(false);
+
+                for (Section section : arrayList) {
+                    section.setSelected(false);
                 }
-                viewHolder.sectionCheck.setChecked(true);
-                selected = viewHolder.sectionCheck;
                 arrayList.get(pos).setSelected(true);
+                notifyDataSetChanged();
             }
+
         });
 
         viewHolder.sectionCheck.setTag(position);
         viewHolder.sectionTv.setText(currentApp.toString());
+        viewHolder.sectionCheck.setChecked(currentApp.isSelected());
 
         return convertView;
     }

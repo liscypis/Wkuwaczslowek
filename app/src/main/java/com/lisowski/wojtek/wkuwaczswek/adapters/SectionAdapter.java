@@ -50,8 +50,6 @@ public class SectionAdapter extends ArrayAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Section currentApp = arrayList.get(position);
-
         viewHolder.check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,6 +59,8 @@ public class SectionAdapter extends ArrayAdapter {
                 else arrayList.get(pos).setSelected(true);
             }
         });
+        Section currentApp = arrayList.get(position);
+
         viewHolder.check.setTag(position);
         viewHolder.label.setText(currentApp.toString());
         viewHolder.check.setChecked(currentApp.isSelected());

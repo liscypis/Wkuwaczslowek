@@ -79,11 +79,6 @@ public class WordsPreview extends AppCompatActivity implements View.OnClickListe
             wordPreviewAdapter = new WordPreviewAdapter(WordsPreview.this, R.layout.words_preview_record, wordsArrayList);
             return null;
         }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-        }
     }
 
     private void showSectionDialog() {

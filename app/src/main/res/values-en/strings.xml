@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Wkuwacz słówek</string>
+    <string name="easyTest">Easy test</string>
+    <string name="difficultTest">Difficult test</string>
+</resources>
