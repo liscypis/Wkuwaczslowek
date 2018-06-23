@@ -96,7 +96,7 @@ public class ChooseLevel extends AppCompatActivity implements View.OnClickListen
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String selectedSection = "Wybrane działy: ";
+                String selectedSection = "Wybrane działy:\n";
                 for (Section section : arrayList) {
                     if (section.isSelected()) {
                         selectedSection += section.getNameOfSection();

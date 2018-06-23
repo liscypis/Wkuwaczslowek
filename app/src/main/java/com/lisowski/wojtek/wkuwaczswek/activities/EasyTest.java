@@ -4,12 +4,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -19,6 +23,7 @@ import com.lisowski.wojtek.wkuwaczswek.entities.Words;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 public class EasyTest extends AppCompatActivity implements View.OnClickListener {
 
@@ -27,14 +32,16 @@ public class EasyTest extends AppCompatActivity implements View.OnClickListener 
     private Button ans2Btn;
     private Button ans3Btn;
     private Button ans4Btn;
-
+    private Drawable defaultButtonColor = null;
     private Context context;
     private AppDatabase database = null;
 
     private static final String TAG = "EasyTest";
 
-    ArrayList<Words> arrayList = null;
+    ArrayList<Words> allWordsList = null;
+    ArrayList<Words> selectedWordsList = null;
     String answer = "";
+    int testIndex;
 
 
     @Override
@@ -56,6 +63,9 @@ public class EasyTest extends AppCompatActivity implements View.OnClickListener 
         ans4Btn = (Button) findViewById(R.id.ans4Btn);
         ans4Btn.setOnClickListener(this);
 
+        defaultButtonColor = ans1Btn.getBackground();
+
+
         // pobieranie id sekcji!
         int[] arrayIDs = getIntent().getIntArrayExtra("IDsSECTIONs");
         Log.d(TAG, "onCreate: " + Arrays.toString(arrayIDs));
@@ -63,16 +73,16 @@ public class EasyTest extends AppCompatActivity implements View.OnClickListener 
         new Thread() {
             @Override
             public void run() {
-                arrayList = new ArrayList<>();
-                arrayList.addAll(database.wordsDao().loadAllBySectionIds(arrayIDs));
-                wordEasyTv.setText(arrayList.get(0).getWord());
-                answer = arrayList.get(0).getTranslation();
-                ans1Btn.setText(arrayList.get(0).getTranslation());
-                ans2Btn.setText(arrayList.get(1).getTranslation());
-                ans3Btn.setText(arrayList.get(2).getTranslation());
-                ans4Btn.setText(arrayList.get(3).getTranslation());
+                allWordsList = new ArrayList<>();
+                selectedWordsList = new ArrayList<>();
+
+                allWordsList.addAll(database.wordsDao().getAll());
+                selectedWordsList.addAll(database.wordsDao().loadAllBySectionIds(arrayIDs));
+
+                loadNextQuestion();
             }
         }.start();
+
     }
 
     @Override
@@ -117,19 +127,22 @@ public class EasyTest extends AppCompatActivity implements View.OnClickListener 
         ans2Btn.setClickable(false);
         ans3Btn.setClickable(false);
         ans4Btn.setClickable(false);
+
+        selectedWordsList.remove(testIndex);
         nextQuestion();
     }
+
     private void showCorrectAnswer() {
-        if(ans1Btn.getText().toString().equals(answer)) {
+        if (ans1Btn.getText().toString().equals(answer)) {
             ans1Btn.setBackgroundColor(Color.GREEN);
         }
-        if(ans2Btn.getText().toString().equals(answer)) {
+        if (ans2Btn.getText().toString().equals(answer)) {
             ans2Btn.setBackgroundColor(Color.GREEN);
         }
-        if(ans3Btn.getText().toString().equals(answer)) {
+        if (ans3Btn.getText().toString().equals(answer)) {
             ans3Btn.setBackgroundColor(Color.GREEN);
         }
-        if(ans4Btn.getText().toString().equals(answer)) {
+        if (ans4Btn.getText().toString().equals(answer)) {
             ans4Btn.setBackgroundColor(Color.GREEN);
         }
     }
@@ -142,18 +155,82 @@ public class EasyTest extends AppCompatActivity implements View.OnClickListener 
             }
 
             public void onFinish() {
+
+                ans1Btn.setBackground(defaultButtonColor);
+                ans2Btn.setBackground(defaultButtonColor);
+                ans3Btn.setBackground(defaultButtonColor);
+                ans4Btn.setBackground(defaultButtonColor);
                 ans1Btn.setClickable(true);
                 ans2Btn.setClickable(true);
                 ans3Btn.setClickable(true);
                 ans4Btn.setClickable(true);
+
+                Animation anim = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
+                Animation adnm2 = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
+
+                anim.setDuration(300);
+                adnm2.setDuration(300);
+                wordEasyTv.startAnimation(adnm2);
+                ans1Btn.startAnimation(anim);
+                ans2Btn.startAnimation(anim);
+                ans3Btn.startAnimation(anim);
+                ans4Btn.startAnimation(anim);
                 loadNextQuestion();
                 //TODO dodać logowanie następnego słowa
             }
         }.start();
     }
+
     private void loadNextQuestion() {
-        // TODO sprawdzać czy są jeszcze słowa w liście
-        showResult();
+        Random random = new Random();
+        testIndex = random.nextInt(selectedWordsList.size());
+
+        int answerIndex = random.nextInt(3) + 1;
+
+        answer = selectedWordsList.get(testIndex).getTranslation();
+        wordEasyTv.setText(selectedWordsList.get(testIndex).getWord());
+
+        switch (answerIndex) {
+            case 1:
+                ans1Btn.setText(selectedWordsList.get(testIndex).getTranslation());
+                break;
+            case 2:
+                ans2Btn.setText(selectedWordsList.get(testIndex).getTranslation());
+                break;
+            case 3:
+                ans3Btn.setText(selectedWordsList.get(testIndex).getTranslation());
+                break;
+            case 4:
+                ans4Btn.setText(selectedWordsList.get(testIndex).getTranslation());
+                break;
+        }
+        for (int i = 1; i <= 4; i++) {
+            if (i == answerIndex)
+                continue;
+            else {
+                for (; ; ) {
+                    int indexOfIncorrectAnswer = random.nextInt(allWordsList.size());
+                    if (!allWordsList.get(indexOfIncorrectAnswer).getTranslation().equals(answer)) {
+                        switch (i) {
+                            case 1:
+                                ans1Btn.setText(allWordsList.get(indexOfIncorrectAnswer).getTranslation());
+                                break;
+                            case 2:
+                                ans2Btn.setText(allWordsList.get(indexOfIncorrectAnswer).getTranslation());
+                                break;
+                            case 3:
+                                ans3Btn.setText(allWordsList.get(indexOfIncorrectAnswer).getTranslation());
+                                break;
+                            case 4:
+                                ans4Btn.setText(allWordsList.get(indexOfIncorrectAnswer).getTranslation());
+                                break;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        //showResult();
     }
 
     private void showResult() {
