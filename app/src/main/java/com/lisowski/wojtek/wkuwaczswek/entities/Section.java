@@ -72,29 +72,11 @@ public class Section {
     public static Section[] populateData() {
         return new Section[]{
                 new Section(1, "Rodzina"),
-                new Section(2, "a"),
-                new Section(3, "s"),
-                new Section(4, "d"),
-                new Section(5, "f"),
-                new Section(6, "s"),
-                new Section(7, "Rodzina"),
-                new Section(8, "a"),
-                new Section(9, "s"),
-                new Section(10, "d"),
-                new Section(11, "f"),
-                new Section(12, "s"),
-                new Section(13, "Rodzina"),
-                new Section(14, "a"),
-                new Section(15, "s"),
-                new Section(16, "d"),
-                new Section(17, "f"),
-                new Section(18, "s"),
-                new Section(19, "Rodzina"),
-                new Section(20, "a"),
-                new Section(21, "s"),
-                new Section(22, "d"),
-                new Section(23, "f"),
-                new Section(24, "s"),
+                new Section(2, "Przedmioty szkolne"),
+                new Section(3, "Sprzęty domowe"),
+                new Section(4, "Meble"),
+                new Section(5, "Budynki"),
+                new Section(6, "Kuchnia")
         };
     }
 

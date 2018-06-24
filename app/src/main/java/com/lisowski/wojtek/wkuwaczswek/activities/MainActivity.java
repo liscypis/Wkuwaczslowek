@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         protected Void doInBackground(Void... voids) {
             database.sectionDao().getAll();
+            database.wordsDao().getAll();
             return null;
         }
     }
