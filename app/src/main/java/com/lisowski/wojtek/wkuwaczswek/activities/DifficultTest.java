@@ -114,8 +114,8 @@ public class DifficultTest extends AppCompatActivity implements View.OnClickList
         String string = answer;
         hint += string.charAt(hindIndex);
         hindIndex++;
-        if (hindIndex == string.length()) {
-            inputTranslationEt.setText(hint);
+        if (hindIndex == string.length() / 2 + 1) {
+            inputTranslationEt.setText(answer);
             inputTranslationEt.setTextColor(Color.RED);
             hintBtn.setEnabled(false);
             applyDifTestBtn.setEnabled(false);

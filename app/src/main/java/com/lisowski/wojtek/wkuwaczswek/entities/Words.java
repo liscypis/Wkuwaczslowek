@@ -116,7 +116,7 @@ public class Words {
                 new Words(33, "wdowa", "widow", 1),
                 new Words(34, "wdowiec", "widower", 1),
                 new Words(35, "wujek", "uncle", 1),
-                new Words(36, "artplastyka", "art", 2),
+                new Words(36, "plastyka", "art", 2),
                 new Words(37, "biologia", "biology", 2),
                 new Words(38, "chemia", "chemistry", 2),
                 new Words(39, "angielski", "english", 2),

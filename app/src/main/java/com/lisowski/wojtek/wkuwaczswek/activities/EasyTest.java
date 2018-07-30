@@ -10,11 +10,14 @@ import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lisowski.wojtek.wkuwaczswek.R;
 import com.lisowski.wojtek.wkuwaczswek.database.AppDatabase;
@@ -41,6 +44,7 @@ public class EasyTest extends AppCompatActivity implements View.OnClickListener 
     ArrayList<Words> selectedWordsList = null;
     String answer = "";
     private int testIndex, questionCounter = 0, questionQuantity, correctAnswer = 0;
+
 
 
     @Override
@@ -136,6 +140,41 @@ public class EasyTest extends AppCompatActivity implements View.OnClickListener 
 
         selectedWordsList.remove(testIndex);
         nextQuestion();
+    }
+
+    // listener do arrowa w toolbarze
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                backButtonHandler();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+//        Toast.makeText(context, "test", Toast.LENGTH_SHORT).show();
+//        finish();
+        backButtonHandler();
+    }
+
+    private void backButtonHandler() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Uwaga");
+        builder.setMessage("Czy na pewno chcesz wyjść?");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        builder.setNegativeButton("Anuluj", null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void showCorrectAnswer() {
