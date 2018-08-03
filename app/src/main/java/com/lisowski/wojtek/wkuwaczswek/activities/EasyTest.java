@@ -157,10 +157,10 @@ public class EasyTest extends AppCompatActivity implements View.OnClickListener 
 
     @Override
     public void onBackPressed() {
-//        Toast.makeText(context, "test", Toast.LENGTH_SHORT).show();
-//        finish();
+
         backButtonHandler();
     }
+
 
     private void backButtonHandler() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
